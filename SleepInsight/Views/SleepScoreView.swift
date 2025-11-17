@@ -9,63 +9,35 @@ import SwiftUI
 
 struct SleepScoreView: View {
     let sleepScore: SleepScore
-    @State private var showAppleScoreInfo = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            // Dual Score Display
-            HStack(spacing: 20) {
-                // Apple Sleep Score
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("Apple Score")
-                            .font(.headline)
+            // SleepInsight Score Display
+            VStack(spacing: 8) {
+                Text("SleepInsight Score")
+                    .font(.headline)
+                    .foregroundColor(.primary)
 
-                        Button(action: { showAppleScoreInfo = true }) {
-                            Image(systemName: "info.circle")
-                                .font(.system(size: 16))
-                                .foregroundColor(.gray)
-                        }
-                    }
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    Text("\(sleepScore.sleepInsightScore)")
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .foregroundColor(scoreColor(for: sleepScore.sleepInsightScore))
 
-                    Text("\(sleepScore.appleTotalScore) / 100")
-                        .font(.largeTitle.bold())
-
-                    Text("Calculated exactly like Apple Health:")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-
-                    Text("Duration (\(sleepScore.appleDurationScore)) + Bedtime (\(sleepScore.appleBedtimeScore)) + Interruptions (\(sleepScore.appleInterruptionsScore))")
-                        .font(.footnote)
+                    Text("/100")
+                        .font(.title2)
                         .foregroundColor(.secondary)
                 }
-                .frame(maxWidth: .infinity)
 
-                Divider()
-                    .frame(height: 60)
-
-                // SleepInsight Adjusted Score
-                VStack(spacing: 8) {
-                    Text("SleepInsight")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .textCase(.uppercase)
-
-                    HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(sleepScore.sleepInsightScore)")
-                            .font(.system(size: 42, weight: .bold, design: .rounded))
-                            .foregroundColor(scoreColor(for: sleepScore.sleepInsightScore))
-
-                        Text("/100")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                .frame(maxWidth: .infinity)
+                Text("SleepInsight uses your Apple Health sleep data but applies its own independent scoring and insights.")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 6)
             }
+            .frame(maxWidth: .infinity)
             .padding(.vertical)
-
-            Divider()
 
             // Component Breakdown
             VStack(alignment: .leading, spacing: 16) {
@@ -111,9 +83,6 @@ struct SleepScoreView: View {
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
-        .sheet(isPresented: $showAppleScoreInfo) {
-            AppleScoreExplanationView()
-        }
     }
 
     private func scoreColor(for score: Int) -> Color {
