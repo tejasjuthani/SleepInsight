@@ -28,7 +28,7 @@ struct SleepScoreView: View {
                         .foregroundColor(.secondary)
                 }
 
-                Text("SleepInsight uses your Apple Health sleep data but applies its own independent scoring and insights.")
+                Text("SleepInsight scores your sleep independently using Apple Health data.")
                     .font(.footnote)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
