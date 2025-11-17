@@ -28,11 +28,18 @@ class SleepAnalyzer {
         let appleInterruptionsScore = interruptionsScore // already scaled 0–20
 
         // SLEEPINSIGHT WEIGHTED SCORE
-        let weighted = Double(appleDurationScore) * 0.50 +
-                       Double(appleBedtimeScore) * 0.30 +
-                       Double(appleInterruptionsScore) * 0.20
+        // Weighted raw score using the 50/30/20 model
+        let rawWeightedScore =
+            (Double(appleDurationScore) * 0.50) +
+            (Double(appleBedtimeScore) * 0.30) +
+            (Double(appleInterruptionsScore) * 0.20)
 
-        let sleepInsightScore = Int(weighted.rounded())
+        // Normalize raw weighted score to 0–100 range
+        // Max possible raw weighted value = 38.0
+        let normalizedScore = Int((rawWeightedScore / 38.0) * 100.0)
+
+        // Final SleepInsight Score (bounded within 0–100)
+        let sleepInsightScore = max(0, min(normalizedScore, 100))
 
         let calendar = Calendar.current
         let bedtimeComponents = calendar.dateComponents([.hour, .minute], from: bedtime)
