@@ -9,47 +9,18 @@ import Foundation
 
 struct SleepScore: Identifiable {
     let id = UUID()
-    let totalScore: Int
-    let durationScore: Int
-    let bedtimeScore: Int
-    let interruptionsScore: Int
+    let appleSleepScore: Int           // Raw Apple Sleep Score (0-100)
+    let adjustedScore: Int              // SleepInsight adjusted score
+    let durationScore: Int              // 0-50
+    let bedtimeScore: Int               // 0-30
+    let interruptionsScore: Int         // 0-20
     let date: Date
 
-    var durationExplanation: String {
-        if durationScore >= 40 {
-            return "Excellent sleep duration - you got the rest you needed."
-        } else if durationScore >= 30 {
-            return "Good sleep duration, but there's room for improvement."
-        } else if durationScore >= 20 {
-            return "Below average sleep duration - try to get more hours."
-        } else {
-            return "Poor sleep duration - prioritize getting more sleep."
-        }
-    }
-
-    var bedtimeExplanation: String {
-        if bedtimeScore >= 24 {
-            return "Great bedtime consistency - your body knows when to sleep."
-        } else if bedtimeScore >= 18 {
-            return "Good bedtime routine, slight variations noticed."
-        } else if bedtimeScore >= 12 {
-            return "Inconsistent bedtime - try to stick to a schedule."
-        } else {
-            return "Poor bedtime consistency - establish a regular schedule."
-        }
-    }
-
-    var interruptionsExplanation: String {
-        if interruptionsScore >= 16 {
-            return "Minimal sleep interruptions - excellent sleep quality."
-        } else if interruptionsScore >= 12 {
-            return "Few interruptions - generally good sleep quality."
-        } else if interruptionsScore >= 8 {
-            return "Some interruptions detected - consider sleep hygiene."
-        } else {
-            return "Frequent interruptions - optimize your sleep environment."
-        }
-    }
+    // Raw sleep metrics
+    let totalSleepHours: Double
+    let bedtimeHour: Int
+    let bedtimeMinute: Int
+    let interruptionCount: Int
 
     var lowestComponent: SleepComponent {
         let components = [
@@ -59,9 +30,42 @@ struct SleepScore: Identifiable {
         ]
         return components.min(by: { $0.1 < $1.1 })?.0 ?? .duration
     }
+
+    var highestComponent: SleepComponent {
+        let components = [
+            (SleepComponent.duration, Double(durationScore) / 50.0),
+            (SleepComponent.bedtime, Double(bedtimeScore) / 30.0),
+            (SleepComponent.interruptions, Double(interruptionsScore) / 20.0)
+        ]
+        return components.max(by: { $0.1 < $1.1 })?.0 ?? .duration
+    }
+
+    var durationPercentage: Double {
+        Double(durationScore) / 50.0
+    }
+
+    var bedtimePercentage: Double {
+        Double(bedtimeScore) / 30.0
+    }
+
+    var interruptionsPercentage: Double {
+        Double(interruptionsScore) / 20.0
+    }
+
+    var formattedBedtime: String {
+        let period = bedtimeHour < 12 ? "AM" : "PM"
+        let displayHour = bedtimeHour == 0 ? 12 : (bedtimeHour > 12 ? bedtimeHour - 12 : bedtimeHour)
+        return String(format: "%d:%02d %@", displayHour, bedtimeMinute, period)
+    }
+
+    var formattedSleepDuration: String {
+        let hours = Int(totalSleepHours)
+        let minutes = Int((totalSleepHours - Double(hours)) * 60)
+        return "\(hours)h \(minutes)m"
+    }
 }
 
-enum SleepComponent {
+enum SleepComponent: CaseIterable {
     case duration
     case bedtime
     case interruptions
@@ -71,6 +75,22 @@ enum SleepComponent {
         case .duration: return "Duration"
         case .bedtime: return "Bedtime Consistency"
         case .interruptions: return "Sleep Interruptions"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .duration: return "clock.fill"
+        case .bedtime: return "moon.stars.fill"
+        case .interruptions: return "bed.double.fill"
+        }
+    }
+
+    var maxScore: Int {
+        switch self {
+        case .duration: return 50
+        case .bedtime: return 30
+        case .interruptions: return 20
         }
     }
 }

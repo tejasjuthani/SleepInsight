@@ -11,56 +11,91 @@ struct SleepScoreView: View {
     let sleepScore: SleepScore
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Main Score Display
-            VStack(spacing: 8) {
-                Text("Sleep Score")
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text("\(sleepScore.totalScore)")
-                        .font(.system(size: 60, weight: .bold, design: .rounded))
-                        .foregroundColor(scoreColor(for: sleepScore.totalScore))
-
-                    Text("/100")
-                        .font(.title2)
+        VStack(alignment: .leading, spacing: 24) {
+            // Dual Score Display
+            HStack(spacing: 20) {
+                // Apple Sleep Score
+                VStack(spacing: 8) {
+                    Text("Apple Score")
+                        .font(.caption)
                         .foregroundColor(.secondary)
+                        .textCase(.uppercase)
+
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("\(sleepScore.appleSleepScore)")
+                            .font(.system(size: 42, weight: .bold, design: .rounded))
+                            .foregroundColor(scoreColor(for: sleepScore.appleSleepScore))
+
+                        Text("/100")
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                    }
                 }
+                .frame(maxWidth: .infinity)
+
+                Divider()
+                    .frame(height: 60)
+
+                // SleepInsight Adjusted Score
+                VStack(spacing: 8) {
+                    Text("SleepInsight")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .textCase(.uppercase)
+
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("\(sleepScore.adjustedScore)")
+                            .font(.system(size: 42, weight: .bold, design: .rounded))
+                            .foregroundColor(scoreColor(for: sleepScore.adjustedScore))
+
+                        Text("/100")
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
             .padding(.vertical)
 
             Divider()
 
             // Component Breakdown
             VStack(alignment: .leading, spacing: 16) {
-                Text("Breakdown")
+                Text("Component Breakdown")
                     .font(.headline)
                     .padding(.bottom, 4)
 
                 ComponentRow(
                     title: "Duration",
+                    subtitle: sleepScore.formattedSleepDuration,
                     score: sleepScore.durationScore,
                     maxScore: 50,
-                    explanation: sleepScore.durationExplanation,
-                    isLowest: sleepScore.lowestComponent == .duration
+                    percentage: sleepScore.durationPercentage,
+                    icon: "clock.fill",
+                    isLowest: sleepScore.lowestComponent == .duration,
+                    isHighest: sleepScore.highestComponent == .duration
                 )
 
                 ComponentRow(
                     title: "Bedtime Consistency",
+                    subtitle: "Bedtime: \(sleepScore.formattedBedtime)",
                     score: sleepScore.bedtimeScore,
                     maxScore: 30,
-                    explanation: sleepScore.bedtimeExplanation,
-                    isLowest: sleepScore.lowestComponent == .bedtime
+                    percentage: sleepScore.bedtimePercentage,
+                    icon: "moon.stars.fill",
+                    isLowest: sleepScore.lowestComponent == .bedtime,
+                    isHighest: sleepScore.highestComponent == .bedtime
                 )
 
                 ComponentRow(
-                    title: "Interruptions",
+                    title: "Sleep Continuity",
+                    subtitle: "\(sleepScore.interruptionCount) interruption\(sleepScore.interruptionCount == 1 ? "" : "s")",
                     score: sleepScore.interruptionsScore,
                     maxScore: 20,
-                    explanation: sleepScore.interruptionsExplanation,
-                    isLowest: sleepScore.lowestComponent == .interruptions
+                    percentage: sleepScore.interruptionsPercentage,
+                    icon: "bed.double.fill",
+                    isLowest: sleepScore.lowestComponent == .interruptions,
+                    isHighest: sleepScore.highestComponent == .interruptions
                 )
             }
         }
@@ -82,29 +117,47 @@ struct SleepScoreView: View {
 
 struct ComponentRow: View {
     let title: String
+    let subtitle: String
     let score: Int
     let maxScore: Int
-    let explanation: String
+    let percentage: Double
+    let icon: String
     let isLowest: Bool
+    let isHighest: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
+                Image(systemName: icon)
+                    .font(.body)
+                    .foregroundColor(componentColor)
+                    .frame(width: 24)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
 
                 Spacer()
 
                 Text("\(score)/\(maxScore)")
                     .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
                     .foregroundColor(componentColor)
 
                 if isLowest {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .font(.caption)
+                    Image(systemName: "arrow.down.circle.fill")
+                        .font(.body)
                         .foregroundColor(.orange)
+                } else if isHighest {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.body)
+                        .foregroundColor(.green)
                 }
             }
 
@@ -113,29 +166,31 @@ struct ComponentRow: View {
                 ZStack(alignment: .leading) {
                     Rectangle()
                         .fill(Color.gray.opacity(0.2))
-                        .frame(height: 6)
-                        .cornerRadius(3)
+                        .frame(height: 8)
+                        .cornerRadius(4)
 
                     Rectangle()
-                        .fill(componentColor)
-                        .frame(width: geometry.size.width * CGFloat(score) / CGFloat(maxScore), height: 6)
-                        .cornerRadius(3)
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: [componentColor.opacity(0.7), componentColor]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: geometry.size.width * CGFloat(percentage), height: 8)
+                        .cornerRadius(4)
                 }
             }
-            .frame(height: 6)
-
-            Text(explanation)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            .frame(height: 8)
         }
         .padding()
-        .background(isLowest ? Color.orange.opacity(0.1) : Color(.secondarySystemBackground))
-        .cornerRadius(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(isLowest ? Color.orange.opacity(0.1) : Color(.secondarySystemBackground))
+        )
     }
 
     private var componentColor: Color {
-        let percentage = Double(score) / Double(maxScore)
         switch percentage {
         case 0.8...1.0: return .green
         case 0.6..<0.8: return .blue
@@ -148,11 +203,16 @@ struct ComponentRow: View {
 #Preview {
     SleepScoreView(
         sleepScore: SleepScore(
-            totalScore: 67,
-            durationScore: 35,
-            bedtimeScore: 20,
-            interruptionsScore: 12,
-            date: Date()
+            appleSleepScore: 84,
+            adjustedScore: 78,
+            durationScore: 48,
+            bedtimeScore: 22,
+            interruptionsScore: 14,
+            date: Date(),
+            totalSleepHours: 8.25,
+            bedtimeHour: 22,
+            bedtimeMinute: 30,
+            interruptionCount: 3
         )
     )
     .padding()

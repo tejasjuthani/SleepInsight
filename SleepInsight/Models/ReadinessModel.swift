@@ -25,15 +25,15 @@ struct ReadinessScore: Identifiable {
     var description: String {
         switch score {
         case 9...10:
-            return "You're at peak performance today! Take on your biggest challenges."
+            return "Peak performance day — great for hard workouts and challenging tasks."
         case 7...8:
-            return "You're ready for a productive day. Your energy levels are solid."
+            return "High readiness — your energy levels are solid for a productive day."
         case 5...6:
-            return "You're moderately ready. Pace yourself and prioritize important tasks."
+            return "Moderate readiness — pace yourself and prioritize important tasks."
         case 3...4:
-            return "Your energy is low. Consider light activities and early rest tonight."
+            return "Low energy — consider light activities and prioritize rest tonight."
         default:
-            return "You need recovery. Take it easy today and prioritize sleep tonight."
+            return "Recovery needed — take it easy today and focus on sleep tonight."
         }
     }
 
@@ -47,8 +47,18 @@ struct ReadinessScore: Identifiable {
         }
     }
 
+    var adviceType: String {
+        switch score {
+        case 9...10: return "Go for it!"
+        case 7...8: return "Strong day ahead"
+        case 5...6: return "Balanced approach"
+        case 3...4: return "Take it easier"
+        default: return "Prioritize recovery"
+        }
+    }
+
     static func calculate(from sleepScore: Int) -> Int {
         let readiness = Int(round(Double(sleepScore) / 10.0))
-        return max(1, min(10, readiness)) // Clamp between 1-10
+        return max(1, min(10, readiness))
     }
 }

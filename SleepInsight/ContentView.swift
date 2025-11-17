@@ -31,7 +31,7 @@ struct ContentView: View {
                 } else if let errorMessage = healthKitService.errorMessage {
                     ErrorView(message: errorMessage)
                 } else if let sleepScore = healthKitService.sleepScore {
-                    MainContentView(sleepScore: sleepScore)
+                    MainDashboardView(sleepScore: sleepScore)
                 } else {
                     EmptyStateView()
                 }
@@ -47,19 +47,25 @@ struct ContentView: View {
                             }
                         } label: {
                             Image(systemName: "arrow.clockwise")
+                                .foregroundColor(.white)
                         }
                     }
                 }
             }
+            .toolbarColorScheme(.dark, for: .navigationBar)
         }
     }
 }
+
+// MARK: - Authorization View
 
 struct AuthorizationView: View {
     @EnvironmentObject var healthKitService: HealthKitService
 
     var body: some View {
         VStack(spacing: 30) {
+            Spacer()
+
             Image(systemName: "heart.text.square.fill")
                 .font(.system(size: 80))
                 .foregroundColor(.pink)
@@ -70,15 +76,33 @@ struct AuthorizationView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
 
-                Text("Unlock personalized sleep insights")
+                Text("Advanced sleep analytics powered by HealthKit")
                     .font(.headline)
                     .foregroundColor(.white.opacity(0.8))
+                    .multilineTextAlignment(.center)
             }
 
             VStack(alignment: .leading, spacing: 16) {
-                FeatureRow(icon: "bed.double.fill", title: "Sleep Score Decoder", description: "Understand your Apple Sleep Score components")
-                FeatureRow(icon: "lightbulb.fill", title: "Daily Tips", description: "Get actionable advice to improve your sleep")
-                FeatureRow(icon: "gauge.high", title: "Morning Readiness", description: "Know your energy level for the day ahead")
+                FeatureRow(
+                    icon: "chart.bar.fill",
+                    title: "Dual Sleep Scoring",
+                    description: "See both Apple and SleepInsight adjusted scores"
+                )
+                FeatureRow(
+                    icon: "exclamationmark.bubble.fill",
+                    title: "Behavioral Insights",
+                    description: "Understand what helped and hurt your sleep"
+                )
+                FeatureRow(
+                    icon: "bolt.fill",
+                    title: "Daily Action Plans",
+                    description: "Get specific, actionable tips to improve"
+                )
+                FeatureRow(
+                    icon: "gauge.high",
+                    title: "Morning Readiness",
+                    description: "Know your energy level for the day"
+                )
             }
             .padding()
             .background(Color.white.opacity(0.1))
@@ -97,7 +121,8 @@ struct AuthorizationView: View {
                     .background(Color.pink)
                     .cornerRadius(12)
             }
-            .padding(.top)
+
+            Spacer()
         }
         .padding()
     }
@@ -129,6 +154,8 @@ struct FeatureRow: View {
     }
 }
 
+// MARK: - Loading View
+
 struct LoadingView: View {
     var body: some View {
         VStack(spacing: 20) {
@@ -139,9 +166,15 @@ struct LoadingView: View {
             Text("Analyzing your sleep data...")
                 .font(.headline)
                 .foregroundColor(.white)
+
+            Text("Reading HealthKit sleep samples")
+                .font(.caption)
+                .foregroundColor(.white.opacity(0.7))
         }
     }
 }
+
+// MARK: - Error View
 
 struct ErrorView: View {
     let message: String
@@ -169,18 +202,23 @@ struct ErrorView: View {
                     await healthKitService.fetchYesterdaySleepScore()
                 }
             } label: {
-                Text("Try Again")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 32)
-                    .padding(.vertical, 12)
-                    .background(Color.orange)
-                    .cornerRadius(12)
+                HStack {
+                    Image(systemName: "arrow.clockwise")
+                    Text("Try Again")
+                }
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding(.horizontal, 32)
+                .padding(.vertical, 12)
+                .background(Color.orange)
+                .cornerRadius(12)
             }
         }
         .padding()
     }
 }
+
+// MARK: - Empty State View
 
 struct EmptyStateView: View {
     @EnvironmentObject var healthKitService: HealthKitService
@@ -196,11 +234,18 @@ struct EmptyStateView: View {
                 .fontWeight(.bold)
                 .foregroundColor(.white)
 
-            Text("We couldn't find sleep data for yesterday. Make sure you're wearing your Apple Watch to bed.")
-                .font(.body)
-                .foregroundColor(.white.opacity(0.9))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+            VStack(spacing: 12) {
+                Text("We couldn't find sleep data for yesterday.")
+                    .font(.body)
+                    .foregroundColor(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+
+                Text("Make sure you're wearing your Apple Watch to bed and Sleep tracking is enabled.")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.7))
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal)
 
             Button {
                 Task {
@@ -220,35 +265,6 @@ struct EmptyStateView: View {
             }
         }
         .padding()
-    }
-}
-
-struct MainContentView: View {
-    let sleepScore: SleepScore
-
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Readiness Score at top
-                ReadinessView(
-                    readiness: ReadinessScore(
-                        score: ReadinessScore.calculate(from: sleepScore.totalScore),
-                        date: sleepScore.date
-                    )
-                )
-
-                // Sleep Score breakdown
-                SleepScoreView(sleepScore: sleepScore)
-
-                // Daily Tip based on lowest component
-                DailyTipView(
-                    tip: DailyTip.generateTip(for: sleepScore.lowestComponent)
-                )
-
-                Spacer(minLength: 40)
-            }
-            .padding()
-        }
     }
 }
 

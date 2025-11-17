@@ -13,11 +13,16 @@
 		A1000007000000000000001 /* SleepScoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000008000000000000001 /* SleepScoreModel.swift */; };
 		A1000009000000000000001 /* DailyTipModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000010000000000000001 /* DailyTipModel.swift */; };
 		A1000011000000000000001 /* ReadinessModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000012000000000000001 /* ReadinessModel.swift */; };
+		A1000042000000000000001 /* InsightModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000043000000000000001 /* InsightModel.swift */; };
 		A1000013000000000000001 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000014000000000000001 /* HealthKitService.swift */; };
 		A1000015000000000000001 /* SleepAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000016000000000000001 /* SleepAnalyzer.swift */; };
+		A1000044000000000000001 /* InsightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000045000000000000001 /* InsightEngine.swift */; };
+		A1000046000000000000001 /* TipEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000047000000000000001 /* TipEngine.swift */; };
 		A1000017000000000000001 /* SleepScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000018000000000000001 /* SleepScoreView.swift */; };
 		A1000019000000000000001 /* DailyTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000020000000000000001 /* DailyTipView.swift */; };
 		A1000021000000000000001 /* ReadinessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000022000000000000001 /* ReadinessView.swift */; };
+		A1000048000000000000001 /* InsightBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000049000000000000001 /* InsightBreakdownView.swift */; };
+		A1000050000000000000001 /* MainDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000051000000000000001 /* MainDashboardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,11 +33,16 @@
 		A1000008000000000000001 /* SleepScoreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreModel.swift; sourceTree = "<group>"; };
 		A1000010000000000000001 /* DailyTipModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTipModel.swift; sourceTree = "<group>"; };
 		A1000012000000000000001 /* ReadinessModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadinessModel.swift; sourceTree = "<group>"; };
+		A1000043000000000000001 /* InsightModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightModel.swift; sourceTree = "<group>"; };
 		A1000014000000000000001 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		A1000016000000000000001 /* SleepAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepAnalyzer.swift; sourceTree = "<group>"; };
+		A1000045000000000000001 /* InsightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightEngine.swift; sourceTree = "<group>"; };
+		A1000047000000000000001 /* TipEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipEngine.swift; sourceTree = "<group>"; };
 		A1000018000000000000001 /* SleepScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreView.swift; sourceTree = "<group>"; };
 		A1000020000000000000001 /* DailyTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTipView.swift; sourceTree = "<group>"; };
 		A1000022000000000000001 /* ReadinessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadinessView.swift; sourceTree = "<group>"; };
+		A1000049000000000000001 /* InsightBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightBreakdownView.swift; sourceTree = "<group>"; };
+		A1000051000000000000001 /* MainDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDashboardView.swift; sourceTree = "<group>"; };
 		A1000024000000000000001 /* SleepInsight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SleepInsight.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +93,7 @@
 				A1000008000000000000001 /* SleepScoreModel.swift */,
 				A1000010000000000000001 /* DailyTipModel.swift */,
 				A1000012000000000000001 /* ReadinessModel.swift */,
+				A1000043000000000000001 /* InsightModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -92,6 +103,8 @@
 			children = (
 				A1000014000000000000001 /* HealthKitService.swift */,
 				A1000016000000000000001 /* SleepAnalyzer.swift */,
+				A1000045000000000000001 /* InsightEngine.swift */,
+				A1000047000000000000001 /* TipEngine.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -102,6 +115,8 @@
 				A1000018000000000000001 /* SleepScoreView.swift */,
 				A1000020000000000000001 /* DailyTipView.swift */,
 				A1000022000000000000001 /* ReadinessView.swift */,
+				A1000049000000000000001 /* InsightBreakdownView.swift */,
+				A1000051000000000000001 /* MainDashboardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -134,7 +149,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					A1000032000000000000001 = {
 						CreatedOnToolsVersion = 15.0;
@@ -180,11 +195,16 @@
 				A1000007000000000000001 /* SleepScoreModel.swift in Sources */,
 				A1000009000000000000001 /* DailyTipModel.swift in Sources */,
 				A1000011000000000000001 /* ReadinessModel.swift in Sources */,
+				A1000042000000000000001 /* InsightModel.swift in Sources */,
 				A1000013000000000000001 /* HealthKitService.swift in Sources */,
 				A1000015000000000000001 /* SleepAnalyzer.swift in Sources */,
+				A1000044000000000000001 /* InsightEngine.swift in Sources */,
+				A1000046000000000000001 /* TipEngine.swift in Sources */,
 				A1000017000000000000001 /* SleepScoreView.swift in Sources */,
 				A1000019000000000000001 /* DailyTipView.swift in Sources */,
 				A1000021000000000000001 /* ReadinessView.swift in Sources */,
+				A1000048000000000000001 /* InsightBreakdownView.swift in Sources */,
+				A1000050000000000000001 /* MainDashboardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +246,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UVXT27FBX2;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -249,6 +270,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -289,6 +311,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = UVXT27FBX2;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -305,6 +328,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};

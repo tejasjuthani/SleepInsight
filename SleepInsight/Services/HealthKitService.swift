@@ -8,6 +8,7 @@
 import Foundation
 import HealthKit
 
+@MainActor
 class HealthKitService: ObservableObject {
     private let healthStore = HKHealthStore()
 

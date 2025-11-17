@@ -11,33 +11,48 @@ import HealthKit
 class SleepAnalyzer {
 
     func analyzeSleepSamples(_ samples: [HKCategorySample], for date: Date) -> SleepScore {
-        // Calculate total sleep duration
+        // Extract raw metrics
         let totalDuration = calculateTotalSleepDuration(samples)
-
-        // Calculate bedtime consistency (using start time)
+        let bedtime = extractBedtime(samples)
+        let interruptionCount = calculateInterruptions(samples)
         let bedtimeConsistency = calculateBedtimeConsistency(samples)
-
-        // Calculate interruptions
-        let interruptions = calculateInterruptions(samples)
 
         // Calculate component scores
         let durationScore = calculateDurationScore(totalDuration)
         let bedtimeScore = calculateBedtimeScore(bedtimeConsistency)
-        let interruptionsScore = calculateInterruptionsScore(interruptions)
+        let interruptionsScore = calculateInterruptionsScore(interruptionCount)
 
-        let totalScore = durationScore + bedtimeScore + interruptionsScore
+        // Apple Sleep Score (simple sum)
+        let appleSleepScore = durationScore + bedtimeScore + interruptionsScore
+
+        // SleepInsight Adjusted Score (weighted formula)
+        // Duration: 50%, Bedtime: 30%, Interruptions: 20%
+        let adjustedScore = Int(
+            (Double(durationScore) * 0.50) +
+            (Double(bedtimeScore) * 0.30) +
+            (Double(interruptionsScore) * 0.20)
+        )
+
+        let calendar = Calendar.current
+        let bedtimeComponents = calendar.dateComponents([.hour, .minute], from: bedtime)
 
         return SleepScore(
-            totalScore: totalScore,
+            appleSleepScore: appleSleepScore,
+            adjustedScore: adjustedScore,
             durationScore: durationScore,
             bedtimeScore: bedtimeScore,
             interruptionsScore: interruptionsScore,
-            date: date
+            date: date,
+            totalSleepHours: totalDuration / 3600.0,
+            bedtimeHour: bedtimeComponents.hour ?? 0,
+            bedtimeMinute: bedtimeComponents.minute ?? 0,
+            interruptionCount: interruptionCount
         )
     }
 
+    // MARK: - Sleep Metrics Calculation
+
     private func calculateTotalSleepDuration(_ samples: [HKCategorySample]) -> TimeInterval {
-        // Filter for asleep periods only (not awake in bed)
         let asleepSamples = samples.filter { sample in
             if #available(iOS 16.0, *) {
                 return sample.value == HKCategoryValueSleepAnalysis.asleepCore.rawValue ||
@@ -49,18 +64,19 @@ class SleepAnalyzer {
             }
         }
 
-        let totalDuration = asleepSamples.reduce(0.0) { total, sample in
+        return asleepSamples.reduce(0.0) { total, sample in
             total + sample.endDate.timeIntervalSince(sample.startDate)
         }
-
-        return totalDuration
     }
 
-    private func calculateBedtimeConsistency(_ samples: [HKCategorySample]) -> TimeInterval {
-        // For MVP, we'll use a simpler approach
-        // In a real implementation, we'd compare against historical bedtimes
-        // For now, we'll check if bedtime is within ideal range (9pm - 11pm)
+    private func extractBedtime(_ samples: [HKCategorySample]) -> Date {
+        guard let firstSample = samples.min(by: { $0.startDate < $1.startDate }) else {
+            return Date()
+        }
+        return firstSample.startDate
+    }
 
+    private func calculateBedtimeConsistency(_ samples: [HKCategorySample]) -> Double {
         guard let firstSample = samples.min(by: { $0.startDate < $1.startDate }) else {
             return 0
         }
@@ -68,23 +84,22 @@ class SleepAnalyzer {
         let calendar = Calendar.current
         let bedtimeHour = calendar.component(.hour, from: firstSample.startDate)
 
-        // Ideal bedtime is between 21:00 (9pm) and 23:00 (11pm)
-        // Return a value between 0 and 1 based on how close to ideal
+        // Ideal bedtime: 21:00-23:00 (9 PM - 11 PM)
         if bedtimeHour >= 21 && bedtimeHour <= 23 {
-            return 1.0 // Perfect
-        } else if bedtimeHour >= 20 && bedtimeHour <= 24 {
-            return 0.7 // Good
-        } else if (bedtimeHour >= 19 && bedtimeHour <= 20) || bedtimeHour == 0 {
-            return 0.5 // Fair
+            return 1.0  // Perfect
+        } else if bedtimeHour >= 20 && bedtimeHour < 21 {
+            return 0.8  // Very Good
+        } else if bedtimeHour == 0 {
+            return 0.7  // Good (midnight)
+        } else if (bedtimeHour >= 19 && bedtimeHour < 20) || (bedtimeHour >= 1 && bedtimeHour <= 2) {
+            return 0.5  // Fair
         } else {
-            return 0.3 // Poor
+            return 0.3  // Poor
         }
     }
 
     private func calculateInterruptions(_ samples: [HKCategorySample]) -> Int {
-        // Count transitions from asleep to awake
         let sortedSamples = samples.sorted { $0.startDate < $1.startDate }
-
         var interruptionCount = 0
         var wasAsleep = false
 
@@ -109,49 +124,53 @@ class SleepAnalyzer {
         return interruptionCount
     }
 
-    // Duration Score: 0-50 points
-    // 7-9 hours = 45-50 points
-    // 6-7 or 9-10 hours = 35-44 points
-    // <6 or >10 hours = 0-34 points
+    // MARK: - Component Scoring
+
     private func calculateDurationScore(_ duration: TimeInterval) -> Int {
         let hours = duration / 3600.0
 
+        // Optimal: 7-9 hours → 45-50 points
         if hours >= 7.0 && hours <= 9.0 {
-            return 45 + Int((9.0 - abs(hours - 8.0)) * 2.5) // 45-50
-        } else if (hours >= 6.0 && hours < 7.0) || (hours > 9.0 && hours <= 10.0) {
+            let idealHours: Double = 8.0
+            let deviation = abs(hours - idealHours)
+            return 50 - Int(deviation * 5.0)  // Small penalty for deviation from 8h
+        }
+        // Good: 6-7 or 9-10 hours → 30-44 points
+        else if (hours >= 6.0 && hours < 7.0) || (hours > 9.0 && hours <= 10.0) {
             if hours < 7.0 {
-                return 35 + Int((hours - 6.0) * 10.0) // 35-44
+                return 30 + Int((hours - 6.0) * 14.0)
             } else {
-                return 35 + Int((10.0 - hours) * 10.0) // 35-44
+                return 30 + Int((10.0 - hours) * 14.0)
             }
-        } else if hours < 6.0 {
-            return Int(hours * 5.0) // 0-30
+        }
+        // Poor: <6 or >10 hours → 0-29 points
+        else if hours < 6.0 {
+            return Int(hours * 5.0)
         } else {
-            return max(0, 30 - Int((hours - 10.0) * 5.0)) // Decreasing score for oversleep
+            return max(0, 25 - Int((hours - 10.0) * 5.0))
         }
     }
 
-    // Bedtime Score: 0-30 points
-    // Based on consistency value (0-1)
-    private func calculateBedtimeScore(_ consistency: TimeInterval) -> Int {
+    private func calculateBedtimeScore(_ consistency: Double) -> Int {
         return Int(consistency * 30.0)
     }
 
-    // Interruptions Score: 0-20 points
-    // 0-1 interruptions = 18-20 points
-    // 2-3 interruptions = 14-17 points
-    // 4-5 interruptions = 10-13 points
-    // >5 interruptions = 0-9 points
     private func calculateInterruptionsScore(_ interruptions: Int) -> Int {
         switch interruptions {
-        case 0...1:
-            return 20 - interruptions
-        case 2...3:
-            return 17 - (interruptions - 2)
-        case 4...5:
-            return 13 - (interruptions - 4)
+        case 0:
+            return 20
+        case 1:
+            return 18
+        case 2:
+            return 16
+        case 3:
+            return 14
+        case 4:
+            return 12
+        case 5:
+            return 10
         default:
-            return max(0, 9 - (interruptions - 6))
+            return max(0, 10 - (interruptions - 5) * 2)
         }
     }
 }
