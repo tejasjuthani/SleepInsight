@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SleepScoreView: View {
     let sleepScore: SleepScore
+    @State private var showAppleScoreInfo = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -16,10 +17,20 @@ struct SleepScoreView: View {
             HStack(spacing: 20) {
                 // Apple Sleep Score
                 VStack(spacing: 8) {
-                    Text("Apple Score")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .textCase(.uppercase)
+                    HStack(spacing: 4) {
+                        Text("Apple Score")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .textCase(.uppercase)
+
+                        Button {
+                            showAppleScoreInfo = true
+                        } label: {
+                            Image(systemName: "info.circle")
+                                .font(.system(size: 14))
+                                .foregroundColor(.secondary)
+                        }
+                    }
 
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text("\(sleepScore.appleTotalScore)")
@@ -103,6 +114,9 @@ struct SleepScoreView: View {
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+        .sheet(isPresented: $showAppleScoreInfo) {
+            AppleScoreExplanationView()
+        }
     }
 
     private func scoreColor(for score: Int) -> Color {
