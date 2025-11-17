@@ -84,7 +84,6 @@ struct MainDashboardView: View {
             appleDurationScore: 48,
             appleBedtimeScore: 22,
             appleInterruptionsScore: 14,
-            appleTotalScore: 84,
             sleepInsightScore: 78,
             date: Date().addingTimeInterval(-86400),
             totalSleepHours: 8.25,

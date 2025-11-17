@@ -17,24 +17,22 @@ class SleepAnalyzer {
         let interruptionCount = calculateInterruptions(samples)
         let bedtimeConsistency = calculateBedtimeConsistency(samples)
 
-        // APPLE SCORE CALCULATION
         // Calculate component scores using Apple's methodology
-        // (HealthKit does not expose Apple's actual sleep score, so we replicate their algorithm)
-        let appleDurationScore = calculateDurationScore(totalDuration)
-        let appleBedtimeScore = calculateBedtimeScore(bedtimeConsistency)
-        let appleInterruptionsScore = calculateInterruptionsScore(interruptionCount)
+        let durationScore = calculateDurationScore(totalDuration)       // 0–50
+        let bedtimeScore = calculateBedtimeScore(bedtimeConsistency)   // 0–30
+        let interruptionsScore = calculateInterruptionsScore(interruptionCount) // 0–20
 
-        // Apple's total sleep score (simple sum of components)
-        let appleTotalScore = appleDurationScore + appleBedtimeScore + appleInterruptionsScore
+        // APPLE DAILY SCORE — EXACT SAME AS APPLE HEALTH
+        let appleDurationScore = durationScore       // already scaled 0–50
+        let appleBedtimeScore = bedtimeScore         // already scaled 0–30
+        let appleInterruptionsScore = interruptionsScore // already scaled 0–20
 
         // SLEEPINSIGHT WEIGHTED SCORE
-        // Our custom weighted formula that prioritizes sleep quality differently
-        // Duration: 50%, Bedtime: 30%, Interruptions: 20%
-        let sleepInsightScore = Int(
-            (Double(appleDurationScore) * 0.50) +
-            (Double(appleBedtimeScore) * 0.30) +
-            (Double(appleInterruptionsScore) * 0.20)
-        )
+        let weighted = Double(appleDurationScore) * 0.50 +
+                       Double(appleBedtimeScore) * 0.30 +
+                       Double(appleInterruptionsScore) * 0.20
+
+        let sleepInsightScore = Int(weighted.rounded())
 
         let calendar = Calendar.current
         let bedtimeComponents = calendar.dateComponents([.hour, .minute], from: bedtime)
@@ -43,7 +41,6 @@ class SleepAnalyzer {
             appleDurationScore: appleDurationScore,
             appleBedtimeScore: appleBedtimeScore,
             appleInterruptionsScore: appleInterruptionsScore,
-            appleTotalScore: appleTotalScore,
             sleepInsightScore: sleepInsightScore,
             date: date,
             totalSleepHours: totalDuration / 3600.0,

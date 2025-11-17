@@ -10,16 +10,18 @@ import Foundation
 struct SleepScore: Identifiable {
     let id = UUID()
 
-    // Apple Health Score Components (calculated using Apple's methodology)
-    // Note: HealthKit does not expose Apple's actual sleep score via API
-    // These are calculated to match Apple's algorithm as closely as possible
-    let appleDurationScore: Int         // Apple's duration score (0-50)
-    let appleBedtimeScore: Int          // Apple's bedtime consistency score (0-30)
-    let appleInterruptionsScore: Int    // Apple's interruptions score (0-20)
-    let appleTotalScore: Int            // Apple-style total (sum of above, 0-100)
+    // Apple Health component scores
+    let appleDurationScore: Int     // 0–50
+    let appleBedtimeScore: Int      // 0–30
+    let appleInterruptionsScore: Int // 0–20
 
-    // SleepInsight Weighted Score (our custom algorithm)
-    let sleepInsightScore: Int          // Weighted score (0-100)
+    // Apple total score (simple sum, EXACT match to Apple Health)
+    var appleTotalScore: Int {
+        appleDurationScore + appleBedtimeScore + appleInterruptionsScore
+    }
+
+    // SleepInsight custom weighted score
+    let sleepInsightScore: Int
 
     let date: Date
 

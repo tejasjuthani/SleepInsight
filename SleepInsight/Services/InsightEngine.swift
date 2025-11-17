@@ -15,7 +15,7 @@ class InsightEngine {
 
         // Analyze Duration
         analyzeDuration(
-            score: sleepScore.durationScore,
+            score: sleepScore.appleDurationScore,
             percentage: sleepScore.durationPercentage,
             totalHours: sleepScore.totalSleepHours,
             helped: &helpedFactors,
@@ -24,7 +24,7 @@ class InsightEngine {
 
         // Analyze Bedtime
         analyzeBedtime(
-            score: sleepScore.bedtimeScore,
+            score: sleepScore.appleBedtimeScore,
             percentage: sleepScore.bedtimePercentage,
             bedtime: sleepScore.formattedBedtime,
             hour: sleepScore.bedtimeHour,
@@ -34,19 +34,19 @@ class InsightEngine {
 
         // Analyze Interruptions
         analyzeInterruptions(
-            score: sleepScore.interruptionsScore,
+            score: sleepScore.appleInterruptionsScore,
             percentage: sleepScore.interruptionsPercentage,
             count: sleepScore.interruptionCount,
             helped: &helpedFactors,
             hurt: &hurtFactors
         )
 
-        let scoreDifference = sleepScore.sleepInsightScore - sleepScore.appleTotalScore
+        let difference = sleepScore.sleepInsightScore - sleepScore.appleTotalScore
 
         return SleepInsights(
             helpedFactors: helpedFactors,
             hurtFactors: hurtFactors,
-            scoreDifference: scoreDifference
+            scoreDifference: difference
         )
     }
 

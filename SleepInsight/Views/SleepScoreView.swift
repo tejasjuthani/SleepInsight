@@ -16,31 +16,28 @@ struct SleepScoreView: View {
             // Dual Score Display
             HStack(spacing: 20) {
                 // Apple Sleep Score
-                VStack(spacing: 8) {
-                    HStack(spacing: 4) {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
                         Text("Apple Score")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .textCase(.uppercase)
+                            .font(.headline)
 
-                        Button {
-                            showAppleScoreInfo = true
-                        } label: {
+                        Button(action: { showAppleScoreInfo = true }) {
                             Image(systemName: "info.circle")
-                                .font(.system(size: 14))
-                                .foregroundColor(.secondary)
+                                .font(.system(size: 16))
+                                .foregroundColor(.gray)
                         }
                     }
 
-                    HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(sleepScore.appleTotalScore)")
-                            .font(.system(size: 42, weight: .bold, design: .rounded))
-                            .foregroundColor(scoreColor(for: sleepScore.appleTotalScore))
+                    Text("\(sleepScore.appleTotalScore) / 100")
+                        .font(.largeTitle.bold())
 
-                        Text("/100")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
-                    }
+                    Text("Calculated exactly like Apple Health:")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+
+                    Text("Duration (\(sleepScore.appleDurationScore)) + Bedtime (\(sleepScore.appleBedtimeScore)) + Interruptions (\(sleepScore.appleInterruptionsScore))")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity)
 
@@ -220,7 +217,6 @@ struct ComponentRow: View {
             appleDurationScore: 48,
             appleBedtimeScore: 22,
             appleInterruptionsScore: 14,
-            appleTotalScore: 84,
             sleepInsightScore: 78,
             date: Date(),
             totalSleepHours: 8.25,
