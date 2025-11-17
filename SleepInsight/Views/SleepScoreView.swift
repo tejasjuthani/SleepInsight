@@ -22,9 +22,9 @@ struct SleepScoreView: View {
                         .textCase(.uppercase)
 
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(sleepScore.appleSleepScore)")
+                        Text("\(sleepScore.appleTotalScore)")
                             .font(.system(size: 42, weight: .bold, design: .rounded))
-                            .foregroundColor(scoreColor(for: sleepScore.appleSleepScore))
+                            .foregroundColor(scoreColor(for: sleepScore.appleTotalScore))
 
                         Text("/100")
                             .font(.title3)
@@ -44,9 +44,9 @@ struct SleepScoreView: View {
                         .textCase(.uppercase)
 
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text("\(sleepScore.adjustedScore)")
+                        Text("\(sleepScore.sleepInsightScore)")
                             .font(.system(size: 42, weight: .bold, design: .rounded))
-                            .foregroundColor(scoreColor(for: sleepScore.adjustedScore))
+                            .foregroundColor(scoreColor(for: sleepScore.sleepInsightScore))
 
                         Text("/100")
                             .font(.title3)
@@ -68,7 +68,7 @@ struct SleepScoreView: View {
                 ComponentRow(
                     title: "Duration",
                     subtitle: sleepScore.formattedSleepDuration,
-                    score: sleepScore.durationScore,
+                    score: sleepScore.appleDurationScore,
                     maxScore: 50,
                     percentage: sleepScore.durationPercentage,
                     icon: "clock.fill",
@@ -79,7 +79,7 @@ struct SleepScoreView: View {
                 ComponentRow(
                     title: "Bedtime Consistency",
                     subtitle: "Bedtime: \(sleepScore.formattedBedtime)",
-                    score: sleepScore.bedtimeScore,
+                    score: sleepScore.appleBedtimeScore,
                     maxScore: 30,
                     percentage: sleepScore.bedtimePercentage,
                     icon: "moon.stars.fill",
@@ -90,7 +90,7 @@ struct SleepScoreView: View {
                 ComponentRow(
                     title: "Sleep Continuity",
                     subtitle: "\(sleepScore.interruptionCount) interruption\(sleepScore.interruptionCount == 1 ? "" : "s")",
-                    score: sleepScore.interruptionsScore,
+                    score: sleepScore.appleInterruptionsScore,
                     maxScore: 20,
                     percentage: sleepScore.interruptionsPercentage,
                     icon: "bed.double.fill",
@@ -203,11 +203,11 @@ struct ComponentRow: View {
 #Preview {
     SleepScoreView(
         sleepScore: SleepScore(
-            appleSleepScore: 84,
-            adjustedScore: 78,
-            durationScore: 48,
-            bedtimeScore: 22,
-            interruptionsScore: 14,
+            appleDurationScore: 48,
+            appleBedtimeScore: 22,
+            appleInterruptionsScore: 14,
+            appleTotalScore: 84,
+            sleepInsightScore: 78,
             date: Date(),
             totalSleepHours: 8.25,
             bedtimeHour: 22,

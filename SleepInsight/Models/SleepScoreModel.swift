@@ -9,11 +9,18 @@ import Foundation
 
 struct SleepScore: Identifiable {
     let id = UUID()
-    let appleSleepScore: Int           // Raw Apple Sleep Score (0-100)
-    let adjustedScore: Int              // SleepInsight adjusted score
-    let durationScore: Int              // 0-50
-    let bedtimeScore: Int               // 0-30
-    let interruptionsScore: Int         // 0-20
+
+    // Apple Health Score Components (calculated using Apple's methodology)
+    // Note: HealthKit does not expose Apple's actual sleep score via API
+    // These are calculated to match Apple's algorithm as closely as possible
+    let appleDurationScore: Int         // Apple's duration score (0-50)
+    let appleBedtimeScore: Int          // Apple's bedtime consistency score (0-30)
+    let appleInterruptionsScore: Int    // Apple's interruptions score (0-20)
+    let appleTotalScore: Int            // Apple-style total (sum of above, 0-100)
+
+    // SleepInsight Weighted Score (our custom algorithm)
+    let sleepInsightScore: Int          // Weighted score (0-100)
+
     let date: Date
 
     // Raw sleep metrics
@@ -24,32 +31,32 @@ struct SleepScore: Identifiable {
 
     var lowestComponent: SleepComponent {
         let components = [
-            (SleepComponent.duration, Double(durationScore) / 50.0),
-            (SleepComponent.bedtime, Double(bedtimeScore) / 30.0),
-            (SleepComponent.interruptions, Double(interruptionsScore) / 20.0)
+            (SleepComponent.duration, Double(appleDurationScore) / 50.0),
+            (SleepComponent.bedtime, Double(appleBedtimeScore) / 30.0),
+            (SleepComponent.interruptions, Double(appleInterruptionsScore) / 20.0)
         ]
         return components.min(by: { $0.1 < $1.1 })?.0 ?? .duration
     }
 
     var highestComponent: SleepComponent {
         let components = [
-            (SleepComponent.duration, Double(durationScore) / 50.0),
-            (SleepComponent.bedtime, Double(bedtimeScore) / 30.0),
-            (SleepComponent.interruptions, Double(interruptionsScore) / 20.0)
+            (SleepComponent.duration, Double(appleDurationScore) / 50.0),
+            (SleepComponent.bedtime, Double(appleBedtimeScore) / 30.0),
+            (SleepComponent.interruptions, Double(appleInterruptionsScore) / 20.0)
         ]
         return components.max(by: { $0.1 < $1.1 })?.0 ?? .duration
     }
 
     var durationPercentage: Double {
-        Double(durationScore) / 50.0
+        Double(appleDurationScore) / 50.0
     }
 
     var bedtimePercentage: Double {
-        Double(bedtimeScore) / 30.0
+        Double(appleBedtimeScore) / 30.0
     }
 
     var interruptionsPercentage: Double {
-        Double(interruptionsScore) / 20.0
+        Double(appleInterruptionsScore) / 20.0
     }
 
     var formattedBedtime: String {

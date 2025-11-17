@@ -43,7 +43,7 @@ struct MainDashboardView: View {
                 // 4. Readiness for Today
                 ReadinessView(
                     readiness: ReadinessScore(
-                        score: ReadinessScore.calculate(from: sleepScore.adjustedScore),
+                        score: ReadinessScore.calculate(from: sleepScore.sleepInsightScore),
                         date: Date()
                     )
                 )
@@ -81,11 +81,11 @@ struct MainDashboardView: View {
 #Preview {
     MainDashboardView(
         sleepScore: SleepScore(
-            appleSleepScore: 84,
-            adjustedScore: 78,
-            durationScore: 48,
-            bedtimeScore: 22,
-            interruptionsScore: 14,
+            appleDurationScore: 48,
+            appleBedtimeScore: 22,
+            appleInterruptionsScore: 14,
+            appleTotalScore: 84,
+            sleepInsightScore: 78,
             date: Date().addingTimeInterval(-86400),
             totalSleepHours: 8.25,
             bedtimeHour: 22,

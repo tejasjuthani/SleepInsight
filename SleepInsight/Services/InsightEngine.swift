@@ -41,7 +41,7 @@ class InsightEngine {
             hurt: &hurtFactors
         )
 
-        let scoreDifference = sleepScore.adjustedScore - sleepScore.appleSleepScore
+        let scoreDifference = sleepScore.sleepInsightScore - sleepScore.appleTotalScore
 
         return SleepInsights(
             helpedFactors: helpedFactors,
