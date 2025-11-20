@@ -17,33 +17,30 @@ struct WeeklyOverviewView: View {
         let weekData = Array(history.suffix(7))
 
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 32) {
                 // Title
                 Text("Weekly Overview")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                    .font(.system(size: 38, weight: .bold))
                     .foregroundColor(.white)
 
                 Text("Last 7 nights based on your SleepInsight+ score.")
-                    .font(.subheadline)
+                    .font(.body)
                     .foregroundColor(.white.opacity(0.7))
 
                 if weekData.isEmpty {
                     // Not enough data state
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("Not enough data yet")
-                            .font(.headline)
+                            .font(.title3)
+                            .fontWeight(.semibold)
                             .foregroundColor(.white)
 
                         Text("Wear your Apple Watch to bed for a few nights so SleepInsight+ can show your weekly trends.")
-                            .font(.subheadline)
+                            .font(.body)
                             .foregroundColor(.white.opacity(0.7))
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.white.opacity(0.08))
-                    )
+                    .padding(20)
+                    .glassCardStyle(.secondary)
                 } else {
                     // Aggregate stats and sections
                     WeeklyStatsSummaryView(weekData: weekData, goalHours: goalHours)
@@ -89,9 +86,10 @@ struct WeeklyStatsSummaryView: View {
         let bestNight = weekData.max(by: { $0.sleepInsightScore < $1.sleepInsightScore })
         let toughestNight = weekData.min(by: { $0.sleepInsightScore < $1.sleepInsightScore })
 
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("This Week at a Glance")
-                .font(.headline)
+                .font(.title2)
+                .fontWeight(.bold)
                 .foregroundColor(.white)
 
             HStack {
@@ -152,11 +150,8 @@ struct WeeklyStatsSummaryView: View {
                     .foregroundColor(.white.opacity(0.8))
             }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.08))
-        )
+        .padding(20)
+        .glassCardStyle(.primary)
     }
 
     private func formattedDay(_ date: Date) -> String {
@@ -178,15 +173,15 @@ struct WeeklyScoreTrendView: View {
     private let minBarHeight: CGFloat = 8.0
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             // Title
             Text("Score Trend")
-                .font(.headline)
+                .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
 
             Text("SleepInsight+ score for each of the last 7 nights.")
-                .font(.caption)
+                .font(.body)
                 .foregroundColor(.white.opacity(0.7))
 
             // Chart
@@ -233,6 +228,8 @@ struct WeeklyScoreTrendView: View {
                                         )
                                     )
                                     .frame(width: barWidth, height: barHeight)
+                                    .scaleEffect(y: selectedIndex == index ? 1.07 : 1.0, anchor: .bottom)
+                                    .animation(.spring(response: 0.28, dampingFraction: 0.75), value: selectedIndex)
 
                                 // Day label
                                 Text(formattedWeekday(score.date))
@@ -268,11 +265,8 @@ struct WeeklyScoreTrendView: View {
                     .padding(.top, 8)
             }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.08))
-        )
+        .padding(20)
+        .glassCardStyle(.secondary)
     }
 
     private func formattedWeekday(_ date: Date) -> String {
@@ -294,9 +288,10 @@ struct WeeklyNightsListView: View {
     let weekData: [SleepScore]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("Night-by-Night View")
-                .font(.headline)
+                .font(.title2)
+                .fontWeight(.bold)
                 .foregroundColor(.white)
 
             ForEach(weekData.sorted(by: { $0.date < $1.date }), id: \.date) { score in
@@ -314,11 +309,8 @@ struct WeeklyNightsListView: View {
 
                     Spacer()
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(0.05))
-                )
+                .padding(16)
+                .glassCardStyle(.tertiary, cornerRadius: 16)
             }
         }
     }

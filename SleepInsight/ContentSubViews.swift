@@ -5,22 +5,22 @@ struct AuthorizationView: View {
     @EnvironmentObject var healthKitService: HealthKitService
 
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 32) {
             Spacer()
 
             Image(systemName: "heart.text.square.fill")
-                .font(.system(size: 80))
+                .font(.system(size: 90))
                 .foregroundColor(.pink)
+                .shadow(color: Color.pink.opacity(0.3), radius: 20, x: 0, y: 10)
 
             VStack(spacing: 12) {
-                Text("Welcome to SleepInsight")
-                    .font(.title)
-                    .fontWeight(.bold)
+                Text("Welcome to SleepInsight+")
+                    .font(.system(size: 36, weight: .bold))
                     .foregroundColor(.white)
 
                 Text("Advanced sleep analytics powered by HealthKit")
                     .font(.headline)
-                    .foregroundColor(.white.opacity(0.8))
+                    .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center)
             }
 
@@ -46,9 +46,8 @@ struct AuthorizationView: View {
                     description: "Know your energy level for the day"
                 )
             }
-            .padding()
-            .background(Color.white.opacity(0.1))
-            .cornerRadius(16)
+            .padding(20)
+            .glassCardStyle(.secondary)
 
             Button {
                 Task { await healthKitService.requestAuthorization() }
@@ -58,8 +57,8 @@ struct AuthorizationView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.pink)
-                    .cornerRadius(12)
+                    .background(Color.pink.opacity(0.9))
+                    .cornerRadius(20)
             }
 
             Spacer()
@@ -77,9 +76,9 @@ struct FeatureRow: View {
     var body: some View {
         HStack(spacing: 16) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(.system(size: 24))
                 .foregroundColor(.pink)
-                .frame(width: 40)
+                .frame(width: 44, height: 44)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
@@ -91,6 +90,8 @@ struct FeatureRow: View {
                     .font(.caption)
                     .foregroundColor(.white.opacity(0.7))
             }
+
+            Spacer()
         }
     }
 }
@@ -98,19 +99,21 @@ struct FeatureRow: View {
 // MARK: - Loading View
 struct LoadingView: View {
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 24) {
             ProgressView()
-                .scaleEffect(1.5)
+                .scaleEffect(1.8)
                 .tint(.white)
 
             Text("Analyzing your sleep data...")
-                .font(.headline)
+                .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(.white)
 
             Text("Reading HealthKit sleep samples")
-                .font(.caption)
+                .font(.callout)
                 .foregroundColor(.white.opacity(0.7))
         }
+        .padding(32)
+        .glassCardStyle(.secondary)
     }
 }
 
@@ -119,14 +122,14 @@ struct EmptyStateView: View {
     @EnvironmentObject var healthKitService: HealthKitService
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 28) {
             Image(systemName: "moon.zzz.fill")
-                .font(.system(size: 60))
+                .font(.system(size: 70))
                 .foregroundColor(.blue)
+                .shadow(color: Color.blue.opacity(0.3), radius: 20, x: 0, y: 10)
 
             Text("No Sleep Data")
-                .font(.title)
-                .fontWeight(.bold)
+                .font(.system(size: 28, weight: .bold))
                 .foregroundColor(.white)
 
             VStack(spacing: 12) {
@@ -140,7 +143,7 @@ struct EmptyStateView: View {
                     .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
 
             Button {
                 Task { await healthKitService.fetchYesterdaySleepScore() }
@@ -152,11 +155,12 @@ struct EmptyStateView: View {
                 .font(.headline)
                 .foregroundColor(.white)
                 .padding(.horizontal, 32)
-                .padding(.vertical, 12)
-                .background(Color.blue)
-                .cornerRadius(12)
+                .padding(.vertical, 14)
+                .background(Color.blue.opacity(0.9))
+                .cornerRadius(20)
             }
         }
-        .padding()
+        .padding(28)
+        .glassCardStyle(.primary)
     }
 }

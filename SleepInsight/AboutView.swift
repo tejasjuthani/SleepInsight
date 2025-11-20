@@ -14,8 +14,7 @@ struct AboutView: View {
                 // App Description
                 VStack(alignment: .leading, spacing: 12) {
                     Text("About SleepInsight+")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+                        .font(.system(size: 38, weight: .bold))
                         .foregroundColor(.white)
 
                     Text("SleepInsight+ is a general wellness application that helps you track and understand your sleep patterns using data from Apple HealthKit. The app provides insights based on sleep duration, bedtime consistency, and sleep interruptions.")
@@ -43,15 +42,8 @@ struct AboutView: View {
                         .font(.body)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.yellow.opacity(0.2))
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.yellow.opacity(0.5), lineWidth: 1)
-                        )
+                        .padding(16)
+                        .glassCardStyle(.tertiary, cornerRadius: 16)
 
                     Text("The information provided by this app is for educational and informational purposes only. It should not be used as a substitute for professional medical advice, diagnosis, or treatment. If you have concerns about your sleep or health, please consult with a qualified healthcare provider.")
                         .font(.caption)
@@ -80,70 +72,61 @@ struct AboutView: View {
                         .fixedSize(horizontal: false, vertical: true)
 
                     // CDC Citation
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 8) {
                         Text("Centers for Disease Control and Prevention (CDC)")
-                            .font(.subheadline)
+                            .font(.body)
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
 
                         Link("Sleep and Sleep Disorders", destination: URL(string: "https://www.cdc.gov/sleep/about/")!)
-                            .font(.caption)
+                            .font(.subheadline)
                             .foregroundColor(.blue.opacity(0.8))
 
                         Text("The CDC provides comprehensive data on sleep duration recommendations and the importance of sleep for overall health.")
-                            .font(.caption)
+                            .font(.subheadline)
                             .foregroundColor(.white.opacity(0.7))
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.white.opacity(0.1))
-                    )
+                    .padding(16)
+                    .glassCardStyle(.tertiary, cornerRadius: 16)
 
                     // NIH Citation
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 8) {
                         Text("National Heart, Lung, and Blood Institute (NIH)")
-                            .font(.subheadline)
+                            .font(.body)
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
 
                         Link("Healthy Sleep", destination: URL(string: "https://www.nhlbi.nih.gov/health/sleep")!)
-                            .font(.caption)
+                            .font(.subheadline)
                             .foregroundColor(.blue.opacity(0.8))
 
                         Text("The NHLBI provides research-based information on sleep health, sleep deficiency, and the importance of quality sleep.")
-                            .font(.caption)
+                            .font(.subheadline)
                             .foregroundColor(.white.opacity(0.7))
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.white.opacity(0.1))
-                    )
+                    .padding(16)
+                    .glassCardStyle(.tertiary, cornerRadius: 16)
 
                     // WHO Citation
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 8) {
                         Text("World Health Organization (WHO)")
-                            .font(.subheadline)
+                            .font(.body)
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
 
                         Link("Physical Activity & Sleep", destination: URL(string: "https://www.who.int/news-room/fact-sheets/detail/physical-activity")!)
-                            .font(.caption)
+                            .font(.subheadline)
                             .foregroundColor(.blue.opacity(0.8))
 
                         Text("The WHO provides guidelines on the relationship between physical activity, rest, and overall wellness.")
-                            .font(.caption)
+                            .font(.subheadline)
                             .foregroundColor(.white.opacity(0.7))
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.white.opacity(0.1))
-                    )
+                    .padding(16)
+                    .glassCardStyle(.tertiary, cornerRadius: 16)
                 }
                 .padding(.bottom, 8)
 

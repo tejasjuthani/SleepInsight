@@ -11,12 +11,12 @@ struct DailyInsightsView: View {
     let insights: [InsightItem]
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             ForEach(insights) { insight in
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 16) {
                     // Title
                     Text(insight.title)
-                        .font(.title3)
+                        .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
 
@@ -80,15 +80,8 @@ struct DailyInsightsView: View {
                             .padding(.top, 4)
                     }
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.white.opacity(insight.priority == 1 ? 0.12 : 0.08))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.white.opacity(insight.priority == 1 ? 0.3 : 0.15), lineWidth: insight.priority == 1 ? 1.5 : 1)
-                )
+                .padding(20)
+                .glassCardStyle(insight.priority == 1 ? .primary : .secondary)
             }
         }
     }

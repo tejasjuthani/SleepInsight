@@ -37,6 +37,7 @@
 		A1000050000000000000001 /* MainDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000051000000000000001 /* MainDashboardView.swift */; };
 		A1000052000000000000001 /* AppleScoreExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000053000000000000001 /* AppleScoreExplanationView.swift */; };
 		A1000066000000000000001 /* WeeklyOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000067000000000000001 /* WeeklyOverviewView.swift */; };
+		A1000068000000000000001 /* GlassCardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000069000000000000001 /* GlassCardStyle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,7 @@
 		A1000051000000000000001 /* MainDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDashboardView.swift; sourceTree = "<group>"; };
 		A1000053000000000000001 /* AppleScoreExplanationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleScoreExplanationView.swift; sourceTree = "<group>"; };
 		A1000067000000000000001 /* WeeklyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyOverviewView.swift; sourceTree = "<group>"; };
+		A1000069000000000000001 /* GlassCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCardStyle.swift; sourceTree = "<group>"; };
 		A1000024000000000000001 /* SleepInsight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SleepInsight.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -146,6 +148,7 @@
 		A1000031000000000000001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A1000070000000000000001 /* Styles */,
 				A1000018000000000000001 /* SleepScoreView.swift */,
 				A1000020000000000000001 /* DailyTipView.swift */,
 				A1000022000000000000001 /* ReadinessView.swift */,
@@ -155,6 +158,14 @@
 				A1000067000000000000001 /* WeeklyOverviewView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A1000070000000000000001 /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				A1000069000000000000001 /* GlassCardStyle.swift */,
+			);
+			path = Styles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,6 +260,7 @@
 				A1000050000000000000001 /* MainDashboardView.swift in Sources */,
 				A1000052000000000000001 /* AppleScoreExplanationView.swift in Sources */,
 				A1000066000000000000001 /* WeeklyOverviewView.swift in Sources */,
+				A1000068000000000000001 /* GlassCardStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

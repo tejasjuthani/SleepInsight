@@ -22,8 +22,7 @@ struct MainDashboardView: View {
                 // App Title
                 HStack {
                     Text("SleepInsight+")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+                        .font(.system(size: 38, weight: .bold))
                         .foregroundColor(.white)
                     Spacer()
                 }
@@ -64,31 +63,24 @@ struct MainDashboardView: View {
                 }
 
                 // Medical Disclaimer
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.yellow)
-                            .font(.caption)
+                            .font(.body)
                         Text("Medical Disclaimer")
-                            .font(.caption)
+                            .font(.body)
                             .fontWeight(.semibold)
-                            .foregroundColor(.white.opacity(0.8))
+                            .foregroundColor(.white)
                     }
 
                     Text("SleepInsight+ is a general wellness app and does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.")
-                        .font(.caption2)
-                        .foregroundColor(.white.opacity(0.6))
+                        .font(.subheadline)
+                        .foregroundColor(.white.opacity(0.7))
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.yellow.opacity(0.1))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
-                )
+                .padding(16)
+                .glassCardStyle(.tertiary, cornerRadius: 16)
 
                 // Bottom spacing
                 Spacer(minLength: 40)
@@ -192,14 +184,27 @@ struct DayButton: View {
                     .foregroundColor(isSelected ? .white : .white.opacity(0.6))
             }
             .frame(width: 70, height: 80)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.blue.opacity(0.3) : Color.white.opacity(0.1))
-            )
+            .background {
+                if isSelected {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.ultraThinMaterial)
+                } else {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.white.opacity(0.1))
+                }
+            }
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color.blue : Color.white.opacity(0.2), lineWidth: isSelected ? 2 : 1)
+                    .stroke(isSelected ? Color.blue.opacity(0.6) : Color.white.opacity(0.2), lineWidth: isSelected ? 2 : 1)
             )
+            .shadow(
+                color: isSelected ? Color.blue.opacity(0.3) : Color.clear,
+                radius: isSelected ? 12 : 0,
+                x: 0,
+                y: isSelected ? 6 : 0
+            )
+            .scaleEffect(isSelected ? 1.05 : 1.0)
+            .animation(.spring(response: 0.28, dampingFraction: 0.75), value: isSelected)
         }
     }
 

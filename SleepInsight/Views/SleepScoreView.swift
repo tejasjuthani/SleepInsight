@@ -13,28 +13,29 @@ struct SleepScoreView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             // SleepInsight Score Display
-            VStack(spacing: 8) {
+            VStack(spacing: 12) {
                 Text("SleepInsight Score")
-                    .font(.headline)
-                    .foregroundColor(.primary)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
 
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
                     Text("\(sleepScore.sleepInsightScore)")
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
-                        .foregroundColor(scoreColor(for: sleepScore.sleepInsightScore))
+                        .font(.system(size: 56, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
 
                     Text("/100")
-                        .font(.title2)
-                        .foregroundColor(.secondary)
+                        .font(.title)
+                        .foregroundColor(.white.opacity(0.6))
                 }
 
                 Text("SleepInsight scores your sleep independently using Apple Health data.")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .font(.body)
+                    .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 20)
-                    .padding(.top, 6)
+                    .padding(.top, 8)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical)
@@ -42,7 +43,9 @@ struct SleepScoreView: View {
             // Component Breakdown
             VStack(alignment: .leading, spacing: 16) {
                 Text("Component Breakdown")
-                    .font(.headline)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
                     .padding(.bottom, 4)
 
                 ComponentRow(
@@ -79,10 +82,8 @@ struct SleepScoreView: View {
                 )
             }
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+        .padding(20)
+        .glassCardStyle(.primary)
     }
 
     private func scoreColor(for score: Int) -> Color {
@@ -109,26 +110,27 @@ struct ComponentRow: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: icon)
-                    .font(.body)
+                    .font(.title3)
                     .foregroundColor(componentColor)
-                    .frame(width: 24)
+                    .frame(width: 32)
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(title)
-                        .font(.subheadline)
+                        .font(.body)
                         .fontWeight(.semibold)
+                        .foregroundColor(.white)
 
                     Text(subtitle)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(.subheadline)
+                        .foregroundColor(.white.opacity(0.7))
                 }
 
                 Spacer()
 
                 Text("\(score)/\(maxScore)")
-                    .font(.subheadline)
+                    .font(.body)
                     .fontWeight(.bold)
-                    .foregroundColor(componentColor)
+                    .foregroundColor(.white)
 
                 if isLowest {
                     Image(systemName: "arrow.down.circle.fill")
@@ -163,11 +165,8 @@ struct ComponentRow: View {
             }
             .frame(height: 8)
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(isLowest ? Color.orange.opacity(0.1) : Color(.secondarySystemBackground))
-        )
+        .padding(16)
+        .glassCardStyle(.tertiary, cornerRadius: 16)
     }
 
     private var componentColor: Color {
