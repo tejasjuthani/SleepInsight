@@ -48,6 +48,11 @@ struct WeeklyOverviewView: View {
                     // Aggregate stats and sections
                     WeeklyStatsSummaryView(weekData: weekData, goalHours: goalHours)
 
+                    // Score trend chart
+                    if weekData.count >= 2 {
+                        WeeklyScoreTrendView(scores: weekData)
+                    }
+
                     WeeklyNightsListView(weekData: weekData)
                 }
 
@@ -158,6 +163,99 @@ struct WeeklyStatsSummaryView: View {
         let f = DateFormatter()
         f.dateFormat = "EEE d MMM"
         return f.string(from: date)
+    }
+}
+
+// MARK: - Weekly Score Trend View
+
+struct WeeklyScoreTrendView: View {
+    let scores: [SleepScore]
+
+    private let goalScore: Double = 70.0
+    private let maxScore: Double = 100.0
+    private let minBarHeight: CGFloat = 8.0
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // Title
+            Text("Score Trend")
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+
+            Text("SleepInsight+ score over the last 7 nights.")
+                .font(.caption)
+                .foregroundColor(.white.opacity(0.7))
+
+            // Chart
+            GeometryReader { geometry in
+                let chartHeight: CGFloat = 180
+                let chartWidth = geometry.size.width
+                let barSpacing: CGFloat = 8
+                let barWidth = (chartWidth - (CGFloat(scores.count - 1) * barSpacing)) / CGFloat(scores.count)
+
+                ZStack(alignment: .bottom) {
+                    // Goal line
+                    let goalLineY = chartHeight * (1 - CGFloat(goalScore / maxScore))
+
+                    // Goal line with label
+                    HStack {
+                        Rectangle()
+                            .fill(Color.yellow.opacity(0.5))
+                            .frame(height: 1)
+
+                        Text("Goal 70")
+                            .font(.caption2)
+                            .foregroundColor(.yellow.opacity(0.8))
+                            .padding(.leading, 4)
+                    }
+                    .offset(y: -goalLineY)
+
+                    // Bars
+                    HStack(alignment: .bottom, spacing: barSpacing) {
+                        ForEach(Array(scores.enumerated()), id: \.element.date) { index, score in
+                            VStack(spacing: 4) {
+                                // Bar
+                                let scoreValue = Double(score.sleepInsightScore)
+                                let barHeight = max(chartHeight * CGFloat(scoreValue / maxScore), minBarHeight)
+
+                                Capsule()
+                                    .fill(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [
+                                                Color.blue.opacity(0.8),
+                                                Color.purple.opacity(0.6)
+                                            ]),
+                                            startPoint: .bottom,
+                                            endPoint: .top
+                                        )
+                                    )
+                                    .frame(width: barWidth, height: barHeight)
+
+                                // Day label
+                                Text(formattedWeekday(score.date))
+                                    .font(.caption2)
+                                    .foregroundColor(.white.opacity(0.7))
+                                    .frame(width: barWidth)
+                            }
+                        }
+                    }
+                }
+                .frame(height: chartHeight + 20)
+            }
+            .frame(height: 220)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.white.opacity(0.08))
+        )
+    }
+
+    private func formattedWeekday(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE"
+        return formatter.string(from: date)
     }
 }
 
