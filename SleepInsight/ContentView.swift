@@ -64,8 +64,6 @@ struct ContentView: View {
                     EmptyStateView()
                 }
             }
-            .navigationTitle("SleepInsight")
-            .navigationBarTitleDisplayMode(.large)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .task {
                 // Always fetch TODAY on first launch

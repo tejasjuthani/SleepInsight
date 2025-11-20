@@ -13,12 +13,12 @@ struct AboutView: View {
             VStack(alignment: .leading, spacing: 24) {
                 // App Description
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("About SleepInsight")
+                    Text("About SleepInsight+")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
 
-                    Text("SleepInsight is a general wellness application that helps you track and understand your sleep patterns using data from Apple HealthKit. The app provides insights based on sleep duration, bedtime consistency, and sleep interruptions.")
+                    Text("SleepInsight+ is a general wellness application that helps you track and understand your sleep patterns using data from Apple HealthKit. The app provides insights based on sleep duration, bedtime consistency, and sleep interruptions.")
                         .font(.body)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
@@ -39,7 +39,7 @@ struct AboutView: View {
                             .foregroundColor(.white)
                     }
 
-                    Text("SleepInsight is a general wellness app and does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.")
+                    Text("SleepInsight+ is a general wellness app and does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.")
                         .font(.body)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
@@ -74,7 +74,7 @@ struct AboutView: View {
                             .foregroundColor(.white)
                     }
 
-                    Text("SleepInsight's insights and recommendations are informed by established sleep health guidelines from reputable health organizations:")
+                    Text("SleepInsight+'s insights and recommendations are informed by established sleep health guidelines from reputable health organizations:")
                         .font(.body)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
@@ -161,7 +161,7 @@ struct AboutView: View {
                             .foregroundColor(.white)
                     }
 
-                    Text("Your sleep data is stored locally on your device and accessed only through Apple HealthKit. SleepInsight does not collect, store, or transmit your personal health information to any external servers.")
+                    Text("Your sleep data is stored locally on your device and accessed only through Apple HealthKit. SleepInsight+ does not collect, store, or transmit your personal health information to any external servers.")
                         .font(.body)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)

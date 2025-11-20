@@ -19,6 +19,16 @@ struct MainDashboardView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // App Title
+                HStack {
+                    Text("SleepInsight+")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .padding(.top, 8)
+
                 // Day Selector
                 DaySelectorView(
                     selectedDate: $selectedDate,
@@ -65,7 +75,7 @@ struct MainDashboardView: View {
                             .foregroundColor(.white.opacity(0.8))
                     }
 
-                    Text("SleepInsight is a general wellness app and does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.")
+                    Text("SleepInsight+ is a general wellness app and does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.")
                         .font(.caption2)
                         .foregroundColor(.white.opacity(0.6))
                         .fixedSize(horizontal: false, vertical: true)
