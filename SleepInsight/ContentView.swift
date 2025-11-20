@@ -66,18 +66,6 @@ struct ContentView: View {
             }
             .navigationTitle("SleepInsight")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                if healthKitService.isAuthorized && healthKitService.sleepScore != nil {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            Task { await healthKitService.fetchYesterdaySleepScore() }
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                                .foregroundColor(.white)
-                        }
-                    }
-                }
-            }
             .toolbarColorScheme(.dark, for: .navigationBar)
         }
     }

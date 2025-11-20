@@ -58,7 +58,7 @@ class HealthKitService: ObservableObject {
                 isAuthorized = true
                 errorMessage = nil
             }
-            await fetchYesterdaySleepScore()
+            await fetchSleepScore(for: Date())
         } catch {
             await MainActor.run {
                 errorMessage = "Failed to authorize HealthKit: \(error.localizedDescription)"

@@ -118,9 +118,11 @@ struct MainDashboardView: View {
     }
 
     private var formattedDate: String {
+        let normalized = Calendar.current.startOfDay(for: selectedDate)
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMM d"
-        return formatter.string(from: sleepScore.date)
+        formatter.dateStyle = .medium
+        formatter.locale = .current
+        return formatter.string(from: normalized)
     }
 }
 
