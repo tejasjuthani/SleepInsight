@@ -60,13 +60,21 @@ struct ContentView: View {
                             }
                         }
                     )
-                } else {
+                } else if healthKitService.checkedForData {
                     EmptyStateView()
                 }
             }
             .navigationTitle("SleepInsight")
             .navigationBarTitleDisplayMode(.large)
             .toolbarColorScheme(.dark, for: .navigationBar)
+            .task {
+                // Always fetch TODAY on first launch
+                await healthKitService.fetchSleepScore(for: selectedDate)
+            }
+            .onAppear {
+                // Always reset to today when screen appears
+                selectedDate = Calendar.current.startOfDay(for: Date())
+            }
         }
     }
 }

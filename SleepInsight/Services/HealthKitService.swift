@@ -20,6 +20,7 @@ class HealthKitService: ObservableObject {
     @Published var errorMessage: String?
     @Published var dailyInsightItems: [InsightItem] = []
     @Published var weeklyHistory: [SleepScore] = []
+    @Published var checkedForData = false
 
     init() {
         checkAuthorizationStatus()
@@ -155,6 +156,7 @@ class HealthKitService: ObservableObject {
                     self.weeklyHistory = []
                     self.isLoading = false
                     self.errorMessage = nil
+                    self.checkedForData = true
                 }
                 return
             }
@@ -198,6 +200,7 @@ class HealthKitService: ObservableObject {
                 self.dailyInsightItems = insightItems
                 self.isLoading = false
                 self.errorMessage = nil
+                self.checkedForData = true
             }
         }
 
