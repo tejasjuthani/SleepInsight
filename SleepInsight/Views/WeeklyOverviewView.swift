@@ -1,0 +1,252 @@
+//
+//  WeeklyOverviewView.swift
+//  SleepInsight
+//
+//  Created by TJ Technologies
+//
+
+import SwiftUI
+
+struct WeeklyOverviewView: View {
+    @EnvironmentObject var healthKitService: HealthKitService
+
+    private let goalHours: Double = 7.0
+
+    var body: some View {
+        let history = healthKitService.weeklyHistory.sorted { $0.date < $1.date }
+        let weekData = Array(history.suffix(7))
+
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Title
+                Text("Weekly Overview")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+
+                Text("Last 7 nights based on your SleepInsight+ score.")
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.7))
+
+                if weekData.isEmpty {
+                    // Not enough data state
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Not enough data yet")
+                            .font(.headline)
+                            .foregroundColor(.white)
+
+                        Text("Wear your Apple Watch to bed for a few nights so SleepInsight+ can show your weekly trends.")
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.7))
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.white.opacity(0.08))
+                    )
+                } else {
+                    // Aggregate stats and sections
+                    WeeklyStatsSummaryView(weekData: weekData, goalHours: goalHours)
+
+                    WeeklyNightsListView(weekData: weekData)
+                }
+
+                Spacer(minLength: 40)
+            }
+            .padding()
+        }
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(red: 0.1, green: 0.1, blue: 0.2),
+                    Color(red: 0.2, green: 0.1, blue: 0.3)
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+        )
+    }
+}
+
+// MARK: - Weekly Stats Summary View
+
+struct WeeklyStatsSummaryView: View {
+    let weekData: [SleepScore]
+    let goalHours: Double
+
+    var body: some View {
+        let avgScore = weekData.map { Double($0.sleepInsightScore) }.reduce(0, +) / Double(weekData.count)
+        let avgDuration = weekData.map { $0.totalSleepHours }.reduce(0, +) / Double(weekData.count)
+        let avgInterruptions = weekData.map { Double($0.interruptionCount) }.reduce(0, +) / Double(weekData.count)
+        let goalNightsMet = weekData.filter { $0.totalSleepHours >= goalHours }.count
+
+        let bestNight = weekData.max(by: { $0.sleepInsightScore < $1.sleepInsightScore })
+        let toughestNight = weekData.min(by: { $0.sleepInsightScore < $1.sleepInsightScore })
+
+        VStack(alignment: .leading, spacing: 12) {
+            Text("This Week at a Glance")
+                .font(.headline)
+                .foregroundColor(.white)
+
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Avg SleepInsight+ Score")
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.7))
+                    Text("\(Int(avgScore.rounded())) / 100")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                }
+
+                Spacer()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Avg Sleep Duration")
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.7))
+                    Text(String(format: "%.1f h", avgDuration))
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                }
+            }
+
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Avg Interruptions")
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.7))
+                    Text(String(format: "%.1f per night", avgInterruptions))
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                }
+
+                Spacer()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Goal Progress")
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.7))
+                    Text("Goal: \(Int(goalHours))h • \(goalNightsMet) of \(weekData.count) nights met")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                }
+            }
+
+            if let best = bestNight {
+                Text("Best night: \(formattedDay(best.date)) • \(best.sleepInsightScore)/100, \(String(format: "%.1f h", best.totalSleepHours))")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.8))
+            }
+
+            if let toughest = toughestNight {
+                Text("Toughest night: \(formattedDay(toughest.date)) • \(toughest.sleepInsightScore)/100, \(String(format: "%.1f h", toughest.totalSleepHours))")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.8))
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.white.opacity(0.08))
+        )
+    }
+
+    private func formattedDay(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.dateFormat = "EEE d MMM"
+        return f.string(from: date)
+    }
+}
+
+// MARK: - Weekly Nights List View
+
+struct WeeklyNightsListView: View {
+    let weekData: [SleepScore]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Night-by-Night View")
+                .font(.headline)
+                .foregroundColor(.white)
+
+            ForEach(weekData.sorted(by: { $0.date < $1.date }), id: \.date) { score in
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(formattedDay(score.date))
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+
+                        Text("Score: \(score.sleepInsightScore)/100 • \(String(format: "%.1f h", score.totalSleepHours)) • \(score.interruptionCount) interruptions")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+
+                    Spacer()
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.white.opacity(0.05))
+                )
+            }
+        }
+    }
+
+    private func formattedDay(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.dateFormat = "EEE d MMM"
+        return f.string(from: date)
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    NavigationView {
+        WeeklyOverviewView()
+            .environmentObject({
+                let service = HealthKitService()
+                // Mock weekly history with sample data
+                service.weeklyHistory = [
+                    SleepScore(
+                        appleDurationScore: 45,
+                        appleBedtimeScore: 20,
+                        appleInterruptionsScore: 15,
+                        sleepInsightScore: 80,
+                        date: Calendar.current.date(byAdding: .day, value: -6, to: Date())!,
+                        totalSleepHours: 7.5,
+                        bedtimeHour: 22,
+                        bedtimeMinute: 30,
+                        interruptionCount: 2
+                    ),
+                    SleepScore(
+                        appleDurationScore: 40,
+                        appleBedtimeScore: 18,
+                        appleInterruptionsScore: 12,
+                        sleepInsightScore: 70,
+                        date: Calendar.current.date(byAdding: .day, value: -5, to: Date())!,
+                        totalSleepHours: 6.5,
+                        bedtimeHour: 23,
+                        bedtimeMinute: 0,
+                        interruptionCount: 4
+                    ),
+                    SleepScore(
+                        appleDurationScore: 48,
+                        appleBedtimeScore: 22,
+                        appleInterruptionsScore: 16,
+                        sleepInsightScore: 86,
+                        date: Calendar.current.date(byAdding: .day, value: -4, to: Date())!,
+                        totalSleepHours: 8.0,
+                        bedtimeHour: 22,
+                        bedtimeMinute: 0,
+                        interruptionCount: 1
+                    )
+                ]
+                return service
+            }())
+    }
+}

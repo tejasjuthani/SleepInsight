@@ -108,6 +108,13 @@ struct MainDashboardView: View {
         )
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: WeeklyOverviewView()) {
+                    Image(systemName: "chart.bar")
+                        .foregroundColor(.white)
+                }
+            }
+
+            ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: AboutView()) {
                     Image(systemName: "info.circle")
                         .foregroundColor(.white)

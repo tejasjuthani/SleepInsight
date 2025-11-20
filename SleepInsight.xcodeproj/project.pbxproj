@@ -36,6 +36,7 @@
 		A1000048000000000000001 /* InsightBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000049000000000000001 /* InsightBreakdownView.swift */; };
 		A1000050000000000000001 /* MainDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000051000000000000001 /* MainDashboardView.swift */; };
 		A1000052000000000000001 /* AppleScoreExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000053000000000000001 /* AppleScoreExplanationView.swift */; };
+		A1000066000000000000001 /* WeeklyOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000067000000000000001 /* WeeklyOverviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +70,7 @@
 		A1000049000000000000001 /* InsightBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightBreakdownView.swift; sourceTree = "<group>"; };
 		A1000051000000000000001 /* MainDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDashboardView.swift; sourceTree = "<group>"; };
 		A1000053000000000000001 /* AppleScoreExplanationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleScoreExplanationView.swift; sourceTree = "<group>"; };
+		A1000067000000000000001 /* WeeklyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyOverviewView.swift; sourceTree = "<group>"; };
 		A1000024000000000000001 /* SleepInsight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SleepInsight.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,6 +152,7 @@
 				A1000049000000000000001 /* InsightBreakdownView.swift */,
 				A1000051000000000000001 /* MainDashboardView.swift */,
 				A1000053000000000000001 /* AppleScoreExplanationView.swift */,
+				A1000067000000000000001 /* WeeklyOverviewView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				A1000048000000000000001 /* InsightBreakdownView.swift in Sources */,
 				A1000050000000000000001 /* MainDashboardView.swift in Sources */,
 				A1000052000000000000001 /* AppleScoreExplanationView.swift in Sources */,
+				A1000066000000000000001 /* WeeklyOverviewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
