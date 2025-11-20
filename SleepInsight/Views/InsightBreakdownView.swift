@@ -21,8 +21,7 @@ struct InsightBreakdownView: View {
                             .font(.title2)
 
                         Text("What Helped Your Score")
-                            .font(.title3)
-                            .fontWeight(.bold)
+                            .roundedFont(size: 20, weight: .bold)
                             .foregroundColor(.white)
                     }
 
@@ -41,8 +40,7 @@ struct InsightBreakdownView: View {
                             .font(.title2)
 
                         Text("What Hurt Your Score")
-                            .font(.title3)
-                            .fontWeight(.bold)
+                            .roundedFont(size: 20, weight: .bold)
                             .foregroundColor(.white)
                     }
 
@@ -61,13 +59,12 @@ struct InsightBreakdownView: View {
                             .font(.title3)
 
                         Text("Score Adjustment")
-                            .font(.body)
-                            .fontWeight(.semibold)
+                            .roundedFont(size: 17, weight: .semibold)
                             .foregroundColor(.white)
                     }
 
                     Text(insights.adjustmentExplanation)
-                        .font(.body)
+                        .proFont(size: 15, weight: .regular)
                         .foregroundColor(.white.opacity(0.8))
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -95,13 +92,12 @@ struct InsightFactorCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 // Title
                 Text(factor.title)
-                    .font(.body)
-                    .fontWeight(.semibold)
+                    .roundedFont(size: 17, weight: .semibold)
                     .foregroundColor(.white)
 
                 // Description
                 Text(factor.description)
-                    .font(.subheadline)
+                    .proFont(size: 14, weight: .regular)
                     .foregroundColor(.white.opacity(0.8))
                     .fixedSize(horizontal: false, vertical: true)
 

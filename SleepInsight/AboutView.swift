@@ -14,11 +14,12 @@ struct AboutView: View {
                 // App Description
                 VStack(alignment: .leading, spacing: 12) {
                     Text("About SleepInsight+")
-                        .font(.system(size: 38, weight: .bold))
+                        .roundedFont(size: 38, weight: .bold)
                         .foregroundColor(.white)
+                        .padding(.top, 24)
 
                     Text("SleepInsight+ is a general wellness application that helps you track and understand your sleep patterns using data from Apple HealthKit. The app provides insights based on sleep duration, bedtime consistency, and sleep interruptions.")
-                        .font(.body)
+                        .proFont(size: 15, weight: .regular)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -33,20 +34,19 @@ struct AboutView: View {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.yellow)
                         Text("Medical Disclaimer")
-                            .font(.headline)
-                            .fontWeight(.bold)
+                            .roundedFont(size: 20, weight: .bold)
                             .foregroundColor(.white)
                     }
 
                     Text("SleepInsight+ is a general wellness app and does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.")
-                        .font(.body)
+                        .proFont(size: 15, weight: .regular)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(16)
                         .glassCardStyle(.tertiary, cornerRadius: 16)
 
                     Text("The information provided by this app is for educational and informational purposes only. It should not be used as a substitute for professional medical advice, diagnosis, or treatment. If you have concerns about your sleep or health, please consult with a qualified healthcare provider.")
-                        .font(.caption)
+                        .proFont(size: 13, weight: .regular)
                         .foregroundColor(.white.opacity(0.7))
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -61,13 +61,12 @@ struct AboutView: View {
                         Image(systemName: "doc.text.fill")
                             .foregroundColor(.blue)
                         Text("Citations & Sources")
-                            .font(.headline)
-                            .fontWeight(.bold)
+                            .roundedFont(size: 20, weight: .bold)
                             .foregroundColor(.white)
                     }
 
                     Text("SleepInsight+'s insights and recommendations are informed by established sleep health guidelines from reputable health organizations:")
-                        .font(.body)
+                        .proFont(size: 15, weight: .regular)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
 
@@ -139,13 +138,12 @@ struct AboutView: View {
                         Image(systemName: "lock.shield.fill")
                             .foregroundColor(.green)
                         Text("Privacy & Data")
-                            .font(.headline)
-                            .fontWeight(.bold)
+                            .roundedFont(size: 20, weight: .bold)
                             .foregroundColor(.white)
                     }
 
                     Text("Your sleep data is stored locally on your device and accessed only through Apple HealthKit. SleepInsight+ does not collect, store, or transmit your personal health information to any external servers.")
-                        .font(.body)
+                        .proFont(size: 15, weight: .regular)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
                 }

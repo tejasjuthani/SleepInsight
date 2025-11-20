@@ -15,22 +15,21 @@ struct SleepScoreView: View {
             // SleepInsight Score Display
             VStack(spacing: 12) {
                 Text("SleepInsight Score")
-                    .font(.title3)
-                    .fontWeight(.semibold)
+                    .roundedFont(size: 20, weight: .semibold)
                     .foregroundColor(.white)
 
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
                     Text("\(sleepScore.sleepInsightScore)")
-                        .font(.system(size: 56, weight: .bold, design: .rounded))
+                        .roundedFont(size: 56, weight: .bold)
                         .foregroundColor(.white)
 
                     Text("/100")
-                        .font(.title)
+                        .roundedFont(size: 24, weight: .medium)
                         .foregroundColor(.white.opacity(0.6))
                 }
 
                 Text("SleepInsight scores your sleep independently using Apple Health data.")
-                    .font(.body)
+                    .proFont(size: 15, weight: .regular)
                     .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
@@ -43,8 +42,7 @@ struct SleepScoreView: View {
             // Component Breakdown
             VStack(alignment: .leading, spacing: 16) {
                 Text("Component Breakdown")
-                    .font(.title3)
-                    .fontWeight(.semibold)
+                    .roundedFont(size: 20, weight: .semibold)
                     .foregroundColor(.white)
                     .padding(.bottom, 4)
 
@@ -116,20 +114,18 @@ struct ComponentRow: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
-                        .font(.body)
-                        .fontWeight(.semibold)
+                        .roundedFont(size: 17, weight: .semibold)
                         .foregroundColor(.white)
 
                     Text(subtitle)
-                        .font(.subheadline)
+                        .proFont(size: 14, weight: .regular)
                         .foregroundColor(.white.opacity(0.7))
                 }
 
                 Spacer()
 
                 Text("\(score)/\(maxScore)")
-                    .font(.body)
-                    .fontWeight(.bold)
+                    .roundedFont(size: 17, weight: .bold)
                     .foregroundColor(.white)
 
                 if isLowest {

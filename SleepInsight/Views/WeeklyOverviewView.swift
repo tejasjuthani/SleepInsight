@@ -20,23 +20,23 @@ struct WeeklyOverviewView: View {
             VStack(alignment: .leading, spacing: 32) {
                 // Title
                 Text("Weekly Overview")
-                    .font(.system(size: 38, weight: .bold))
+                    .roundedFont(size: 38, weight: .bold)
                     .foregroundColor(.white)
+                    .padding(.top, 24)
 
                 Text("Last 7 nights based on your SleepInsight+ score.")
-                    .font(.body)
+                    .proFont(size: 17, weight: .regular)
                     .foregroundColor(.white.opacity(0.7))
 
                 if weekData.isEmpty {
                     // Not enough data state
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Not enough data yet")
-                            .font(.title3)
-                            .fontWeight(.semibold)
+                            .roundedFont(size: 20, weight: .semibold)
                             .foregroundColor(.white)
 
                         Text("Wear your Apple Watch to bed for a few nights so SleepInsight+ can show your weekly trends.")
-                            .font(.body)
+                            .proFont(size: 15, weight: .regular)
                             .foregroundColor(.white.opacity(0.7))
                     }
                     .padding(20)
@@ -88,18 +88,16 @@ struct WeeklyStatsSummaryView: View {
 
         VStack(alignment: .leading, spacing: 16) {
             Text("This Week at a Glance")
-                .font(.title2)
-                .fontWeight(.bold)
+                .roundedFont(size: 28, weight: .bold)
                 .foregroundColor(.white)
 
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Avg SleepInsight+ Score")
-                        .font(.caption)
+                        .proFont(size: 12, weight: .regular)
                         .foregroundColor(.white.opacity(0.7))
                     Text("\(Int(avgScore.rounded())) / 100")
-                        .font(.title2)
-                        .fontWeight(.semibold)
+                        .roundedFont(size: 22, weight: .semibold)
                         .foregroundColor(.white)
                 }
 
@@ -107,11 +105,10 @@ struct WeeklyStatsSummaryView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Avg Sleep Duration")
-                        .font(.caption)
+                        .proFont(size: 12, weight: .regular)
                         .foregroundColor(.white.opacity(0.7))
                     Text(String(format: "%.1f h", avgDuration))
-                        .font(.title3)
-                        .fontWeight(.semibold)
+                        .roundedFont(size: 20, weight: .semibold)
                         .foregroundColor(.white)
                 }
             }
@@ -119,10 +116,10 @@ struct WeeklyStatsSummaryView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Avg Interruptions")
-                        .font(.caption)
+                        .proFont(size: 12, weight: .regular)
                         .foregroundColor(.white.opacity(0.7))
                     Text(String(format: "%.1f per night", avgInterruptions))
-                        .font(.subheadline)
+                        .proFont(size: 15, weight: .regular)
                         .foregroundColor(.white)
                 }
 
@@ -130,24 +127,24 @@ struct WeeklyStatsSummaryView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Goal Progress")
-                        .font(.caption)
+                        .proFont(size: 12, weight: .regular)
                         .foregroundColor(.white.opacity(0.7))
                     Text("Goal: \(Int(goalHours))h • \(goalNightsMet) of \(weekData.count) nights met")
-                        .font(.subheadline)
+                        .proFont(size: 15, weight: .regular)
                         .foregroundColor(.white)
                 }
             }
 
             if let best = bestNight {
                 Text("Best night: \(formattedDay(best.date)) • \(best.sleepInsightScore)/100, \(String(format: "%.1f h", best.totalSleepHours))")
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.8))
+                    .proFont(size: 13, weight: .regular)
+                    .foregroundColor(.white.opacity(0.85))
             }
 
             if let toughest = toughestNight {
                 Text("Toughest night: \(formattedDay(toughest.date)) • \(toughest.sleepInsightScore)/100, \(String(format: "%.1f h", toughest.totalSleepHours))")
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.8))
+                    .proFont(size: 13, weight: .regular)
+                    .foregroundColor(.white.opacity(0.85))
             }
         }
         .padding(20)
@@ -176,12 +173,11 @@ struct WeeklyScoreTrendView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Title
             Text("Score Trend")
-                .font(.title2)
-                .fontWeight(.bold)
+                .roundedFont(size: 28, weight: .bold)
                 .foregroundColor(.white)
 
             Text("SleepInsight+ score for each of the last 7 nights.")
-                .font(.body)
+                .proFont(size: 15, weight: .regular)
                 .foregroundColor(.white.opacity(0.7))
 
             // Chart
@@ -198,12 +194,12 @@ struct WeeklyScoreTrendView: View {
                     // Goal line with label
                     HStack {
                         Rectangle()
-                            .fill(Color.yellow.opacity(0.5))
+                            .fill(Color.yellow.opacity(0.75))
                             .frame(height: 1)
 
                         Text("Goal 70")
-                            .font(.caption2)
-                            .foregroundColor(.yellow.opacity(0.8))
+                            .proFont(size: 11, weight: .medium)
+                            .foregroundColor(.yellow.opacity(0.9))
                             .padding(.leading, 4)
                     }
                     .offset(y: -goalLineY)
@@ -216,24 +212,31 @@ struct WeeklyScoreTrendView: View {
                                 let scoreValue = Double(score.sleepInsightScore)
                                 let barHeight = max(chartHeight * CGFloat(scoreValue / maxScore), minBarHeight)
 
-                                Capsule()
-                                    .fill(
-                                        LinearGradient(
-                                            gradient: Gradient(colors: [
-                                                Color.blue.opacity(0.8),
-                                                Color.purple.opacity(0.6)
-                                            ]),
-                                            startPoint: .bottom,
-                                            endPoint: .top
+                                ZStack {
+                                    Capsule()
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: [
+                                                    Color.blue.opacity(0.8),
+                                                    Color.purple.opacity(0.6)
+                                                ]),
+                                                startPoint: .bottom,
+                                                endPoint: .top
+                                            )
                                         )
-                                    )
-                                    .frame(width: barWidth, height: barHeight)
-                                    .scaleEffect(y: selectedIndex == index ? 1.07 : 1.0, anchor: .bottom)
-                                    .animation(.spring(response: 0.28, dampingFraction: 0.75), value: selectedIndex)
+
+                                    if selectedIndex == index {
+                                        Capsule()
+                                            .stroke(Color.purpleAccent.opacity(0.9), lineWidth: 2)
+                                    }
+                                }
+                                .frame(width: barWidth, height: barHeight)
+                                .scaleEffect(y: selectedIndex == index ? 1.07 : 1.0, anchor: .bottom)
+                                .animation(.spring(response: 0.28, dampingFraction: 0.75), value: selectedIndex)
 
                                 // Day label
                                 Text(formattedWeekday(score.date))
-                                    .font(.caption2)
+                                    .proFont(size: 11, weight: .medium)
                                     .foregroundColor(.white.opacity(0.7))
                                     .frame(width: barWidth)
                             }
@@ -255,12 +258,12 @@ struct WeeklyScoreTrendView: View {
                 let formattedHours = String(format: "%.1f", score.totalSleepHours)
 
                 Text("\(formattedDate) – \(score.sleepInsightScore) / 100, \(formattedHours) h, \(score.interruptionCount) interruptions")
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.8))
+                    .proFont(size: 13, weight: .regular)
+                    .foregroundColor(.white.opacity(0.85))
                     .padding(.top, 8)
             } else {
                 Text("Tap a bar to see that night's details.")
-                    .font(.caption)
+                    .proFont(size: 13, weight: .regular)
                     .foregroundColor(.white.opacity(0.6))
                     .padding(.top, 8)
             }
@@ -290,20 +293,18 @@ struct WeeklyNightsListView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Night-by-Night View")
-                .font(.title2)
-                .fontWeight(.bold)
+                .roundedFont(size: 28, weight: .bold)
                 .foregroundColor(.white)
 
             ForEach(weekData.sorted(by: { $0.date < $1.date }), id: \.date) { score in
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(formattedDay(score.date))
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
+                            .roundedFont(size: 15, weight: .semibold)
                             .foregroundColor(.white)
 
                         Text("Score: \(score.sleepInsightScore)/100 • \(String(format: "%.1f h", score.totalSleepHours)) • \(score.interruptionCount) interruptions")
-                            .font(.caption)
+                            .proFont(size: 13, weight: .regular)
                             .foregroundColor(.white.opacity(0.8))
                     }
 

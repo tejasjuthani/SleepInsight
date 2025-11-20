@@ -16,13 +16,12 @@ struct DailyInsightsView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // Title
                     Text(insight.title)
-                        .font(.title2)
-                        .fontWeight(.bold)
+                        .roundedFont(size: 22, weight: .bold)
                         .foregroundColor(.white)
 
                     // Explanation
                     Text(insight.explanation)
-                        .font(.body)
+                        .proFont(size: 15, weight: .regular)
                         .foregroundColor(.white.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
 
@@ -34,15 +33,14 @@ struct DailyInsightsView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Image(systemName: "moon.stars.fill")
-                                    .foregroundColor(.blue.opacity(0.8))
+                                    .foregroundColor(Color.purpleAccent.opacity(0.9))
                                 Text("TONIGHT'S PLAN")
-                                    .font(.caption)
-                                    .foregroundColor(.white.opacity(0.6))
-                                    .fontWeight(.semibold)
+                                    .roundedFont(size: 12, weight: .semibold)
+                                    .foregroundColor(Color.purpleAccent.opacity(0.9))
                             }
 
                             Text(insight.tonightPlan)
-                                .font(.body)
+                                .proFont(size: 15, weight: .regular)
                                 .foregroundColor(.white.opacity(0.9))
                                 .fixedSize(horizontal: false, vertical: true)
                         }
@@ -56,18 +54,17 @@ struct DailyInsightsView: View {
                                     .foregroundColor(.white.opacity(0.5))
                                     .font(.caption2)
                                 Text("SOURCES")
-                                    .font(.caption2)
+                                    .roundedFont(size: 11, weight: .semibold)
                                     .foregroundColor(.white.opacity(0.5))
-                                    .fontWeight(.semibold)
                             }
 
                             Text("CDC, WHO, NIH")
-                                .font(.caption2)
+                                .proFont(size: 11, weight: .regular)
                                 .foregroundColor(.white.opacity(0.5))
                         }
                     } else {
                         Text("No additional plan needed for this insight.")
-                            .font(.body)
+                            .proFont(size: 15, weight: .regular)
                             .foregroundColor(.white.opacity(0.7))
                             .italic()
                     }
@@ -75,8 +72,8 @@ struct DailyInsightsView: View {
                     // Trend Note
                     if !insight.trendNote.isEmpty {
                         Text(insight.trendNote)
-                            .font(.footnote)
-                            .foregroundColor(.gray)
+                            .proFont(size: 13, weight: .regular)
+                            .foregroundColor(.white.opacity(0.6))
                             .padding(.top, 4)
                     }
                 }

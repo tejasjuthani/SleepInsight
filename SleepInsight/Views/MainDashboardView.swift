@@ -18,15 +18,15 @@ struct MainDashboardView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 24) {
                 // App Title
                 HStack {
                     Text("SleepInsight+")
-                        .font(.system(size: 38, weight: .bold))
+                        .roundedFont(size: 38, weight: .bold)
                         .foregroundColor(.white)
                     Spacer()
                 }
-                .padding(.top, 8)
+                .padding(.top, 24)
 
                 // Day Selector
                 DaySelectorView(
@@ -38,13 +38,12 @@ struct MainDashboardView: View {
                 // Header Section
                 VStack(spacing: 8) {
                     Text(headerText)
-                        .font(.caption)
-                        .foregroundColor(.white.opacity(0.7))
+                        .roundedFont(size: 12, weight: .semibold)
+                        .foregroundColor(Color.purpleAccent.opacity(0.9))
                         .textCase(.uppercase)
 
                     Text(formattedDate)
-                        .font(.title3)
-                        .fontWeight(.semibold)
+                        .roundedFont(size: 20, weight: .semibold)
                         .foregroundColor(.white)
                 }
                 .padding(.top, 8)
@@ -69,13 +68,12 @@ struct MainDashboardView: View {
                             .foregroundColor(.yellow)
                             .font(.body)
                         Text("Medical Disclaimer")
-                            .font(.body)
-                            .fontWeight(.semibold)
+                            .roundedFont(size: 15, weight: .semibold)
                             .foregroundColor(.white)
                     }
 
                     Text("SleepInsight+ is a general wellness app and does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.")
-                        .font(.subheadline)
+                        .proFont(size: 14, weight: .regular)
                         .foregroundColor(.white.opacity(0.7))
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -100,17 +98,17 @@ struct MainDashboardView: View {
         )
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: WeeklyOverviewView()) {
-                    Image(systemName: "chart.bar")
-                        .foregroundColor(.white)
+                HStack(spacing: 16) {
+                    NavigationLink(destination: WeeklyOverviewView()) {
+                        Image(systemName: "chart.bar")
+                            .imageScale(.large)
+                    }
+                    NavigationLink(destination: AboutView()) {
+                        Image(systemName: "info.circle")
+                            .imageScale(.large)
+                    }
                 }
-            }
-
-            ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: AboutView()) {
-                    Image(systemName: "info.circle")
-                        .foregroundColor(.white)
-                }
+                .foregroundColor(.white)
             }
         }
     }
@@ -170,41 +168,43 @@ struct DayButton: View {
         Button(action: onTap) {
             VStack(spacing: 4) {
                 Text(dayLabel)
-                    .font(.caption)
-                    .fontWeight(.semibold)
+                    .roundedFont(size: 11, weight: .semibold)
                     .foregroundColor(isSelected ? .white : .white.opacity(0.6))
 
                 Text(dayNumber)
-                    .font(.title3)
-                    .fontWeight(.bold)
+                    .roundedFont(size: 20, weight: .bold)
                     .foregroundColor(.white)
 
                 Text(monthLabel)
-                    .font(.caption2)
+                    .roundedFont(size: 10, weight: .medium)
                     .foregroundColor(isSelected ? .white : .white.opacity(0.6))
             }
             .frame(width: 70, height: 80)
             .background {
                 if isSelected {
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: 24)
                         .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .fill(Color.purpleAccent.opacity(0.12))
+                        )
                 } else {
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: 24)
                         .fill(Color.white.opacity(0.1))
                 }
             }
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color.blue.opacity(0.6) : Color.white.opacity(0.2), lineWidth: isSelected ? 2 : 1)
+                RoundedRectangle(cornerRadius: 24)
+                    .stroke(isSelected ? Color.purpleAccent.opacity(0.6) : Color.white.opacity(0.2), lineWidth: isSelected ? 2 : 1)
             )
             .shadow(
-                color: isSelected ? Color.blue.opacity(0.3) : Color.clear,
+                color: isSelected ? Color.purpleAccent.opacity(0.3) : Color.clear,
                 radius: isSelected ? 12 : 0,
                 x: 0,
                 y: isSelected ? 6 : 0
             )
             .scaleEffect(isSelected ? 1.05 : 1.0)
-            .animation(.spring(response: 0.28, dampingFraction: 0.75), value: isSelected)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
         }
     }
 

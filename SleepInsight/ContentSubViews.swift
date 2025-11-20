@@ -15,11 +15,11 @@ struct AuthorizationView: View {
 
             VStack(spacing: 12) {
                 Text("Welcome to SleepInsight+")
-                    .font(.system(size: 36, weight: .bold))
+                    .roundedFont(size: 36, weight: .bold)
                     .foregroundColor(.white)
 
-                Text("Advanced sleep analytics powered by HealthKit")
-                    .font(.headline)
+                Text("Sleep insights powered by data from the Health app.")
+                    .proFont(size: 17, weight: .regular)
                     .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center)
             }
@@ -27,23 +27,23 @@ struct AuthorizationView: View {
             VStack(alignment: .leading, spacing: 16) {
                 FeatureRow(
                     icon: "chart.bar.fill",
-                    title: "Dual Sleep Scoring",
-                    description: "See both Apple and SleepInsight adjusted scores"
+                    title: "Daily Sleep Score",
+                    description: "Your duration, bedtime patterns, and interruptions combined into a simple nightly score."
                 )
                 FeatureRow(
-                    icon: "exclamationmark.bubble.fill",
-                    title: "Behavioral Insights",
-                    description: "Understand what helped and hurt your sleep"
+                    icon: "lightbulb.fill",
+                    title: "Behavior-Based Insights",
+                    description: "Clear explanations of what helped and what impacted your sleep."
                 )
                 FeatureRow(
-                    icon: "bolt.fill",
-                    title: "Daily Action Plans",
-                    description: "Get specific, actionable tips to improve"
+                    icon: "moon.stars.fill",
+                    title: "Tonight's Plan",
+                    description: "Simple, actionable suggestions based on your recent sleep patterns."
                 )
                 FeatureRow(
-                    icon: "gauge.high",
-                    title: "Morning Readiness",
-                    description: "Know your energy level for the day"
+                    icon: "calendar.badge.clock",
+                    title: "Weekly Overview",
+                    description: "Track trends, goals, and your best and toughest nights at a glance."
                 )
             }
             .padding(20)
@@ -52,12 +52,12 @@ struct AuthorizationView: View {
             Button {
                 Task { await healthKitService.requestAuthorization() }
             } label: {
-                Text("Connect to HealthKit")
-                    .font(.headline)
+                Text("Connect to Health")
+                    .roundedFont(size: 17, weight: .bold)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.pink.opacity(0.9))
+                    .background(Color.purpleAccent)
                     .cornerRadius(20)
             }
 
@@ -82,12 +82,11 @@ struct FeatureRow: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .roundedFont(size: 15, weight: .semibold)
                     .foregroundColor(.white)
 
                 Text(description)
-                    .font(.caption)
+                    .proFont(size: 13, weight: .regular)
                     .foregroundColor(.white.opacity(0.7))
             }
 
@@ -105,11 +104,11 @@ struct LoadingView: View {
                 .tint(.white)
 
             Text("Analyzing your sleep data...")
-                .font(.system(size: 20, weight: .semibold))
+                .roundedFont(size: 20, weight: .semibold)
                 .foregroundColor(.white)
 
-            Text("Reading HealthKit sleep samples")
-                .font(.callout)
+            Text("Reading Health sleep samples")
+                .proFont(size: 15, weight: .regular)
                 .foregroundColor(.white.opacity(0.7))
         }
         .padding(32)
@@ -129,17 +128,17 @@ struct EmptyStateView: View {
                 .shadow(color: Color.blue.opacity(0.3), radius: 20, x: 0, y: 10)
 
             Text("No Sleep Data")
-                .font(.system(size: 28, weight: .bold))
+                .roundedFont(size: 28, weight: .bold)
                 .foregroundColor(.white)
 
             VStack(spacing: 12) {
                 Text("We couldn't find sleep data for this date.")
-                    .font(.body)
+                    .proFont(size: 17, weight: .regular)
                     .foregroundColor(.white.opacity(0.9))
                     .multilineTextAlignment(.center)
 
                 Text("Make sure you're wearing your Apple Watch to bed and Sleep tracking is enabled in the Health app.")
-                    .font(.caption)
+                    .proFont(size: 13, weight: .regular)
                     .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center)
             }
@@ -152,11 +151,11 @@ struct EmptyStateView: View {
                     Image(systemName: "arrow.clockwise")
                     Text("Refresh")
                 }
-                .font(.headline)
+                .roundedFont(size: 17, weight: .semibold)
                 .foregroundColor(.white)
                 .padding(.horizontal, 32)
                 .padding(.vertical, 14)
-                .background(Color.blue.opacity(0.9))
+                .background(Color.purpleAccent)
                 .cornerRadius(20)
             }
         }
