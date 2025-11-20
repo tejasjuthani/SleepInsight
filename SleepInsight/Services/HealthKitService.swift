@@ -81,9 +81,9 @@ class HealthKitService: ObservableObject {
 
         let calendar = Calendar.current
 
-        // Apple's sleep day boundary: target date at noon → next day at noon
-        guard let targetNoon = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: targetDate),
-              let nextDayNoon = calendar.date(byAdding: .day, value: 1, to: targetNoon) else {
+        // Use midnight-to-midnight window aligned with endDate semantics
+        let dayStart = calendar.startOfDay(for: targetDate)
+        guard let nextDayStart = calendar.date(byAdding: .day, value: 1, to: dayStart) else {
             await MainActor.run {
                 errorMessage = "Failed to calculate sleep window"
                 isLoading = false
@@ -92,7 +92,7 @@ class HealthKitService: ObservableObject {
         }
 
         // Fetch 7 days of historical data for bedtime baseline
-        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: targetNoon) else {
+        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: dayStart) else {
             await MainActor.run {
                 errorMessage = "Failed to calculate baseline window"
                 isLoading = false
@@ -103,8 +103,8 @@ class HealthKitService: ObservableObject {
         // Create predicate for HKSampleQuery
         let predicate = HKQuery.predicateForSamples(
             withStart: sevenDaysAgo,
-            end: nextDayNoon,
-            options: .strictStartDate
+            end: nextDayStart,
+            options: .strictEndDate
         )
 
         // Query HKCategoryType.sleepAnalysis
@@ -135,9 +135,10 @@ class HealthKitService: ObservableObject {
                 return
             }
 
-            // Filter samples for target date's sleep session (noon-to-noon)
+            // Filter samples for target date's sleep session (midnight-to-midnight, by endDate)
             let targetSamples = allSamples.filter { sample in
-                sample.startDate >= targetNoon && sample.startDate < nextDayNoon
+                let endDay = calendar.startOfDay(for: sample.endDate)
+                return endDay == dayStart
             }
 
             if targetSamples.isEmpty {
@@ -165,7 +166,7 @@ class HealthKitService: ObservableObject {
             let baselineBedtimes = self.extractDailyBedtimes(
                 from: allSamples,
                 startDate: sevenDaysAgo,
-                endDate: targetNoon,
+                endDate: dayStart,
                 calendar: calendar
             )
 
@@ -183,7 +184,7 @@ class HealthKitService: ObservableObject {
             let weeklyScores = self.generateWeeklyScores(
                 from: allSamples,
                 startDate: sevenDaysAgo,
-                endDate: targetNoon,
+                endDate: dayStart,
                 calendar: calendar
             )
 
