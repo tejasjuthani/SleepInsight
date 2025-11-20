@@ -168,10 +168,12 @@ class HealthKitService: ObservableObject {
             )
 
             // Analyze sleep data using SleepAnalyzer
+            // Use endDate for date key to match weekly scores dictionary
+            let scoreDate = calendar.startOfDay(for: targetSamples.first?.endDate ?? targetDate)
             let analyzer = SleepAnalyzer()
             let score = analyzer.analyzeSleepSamples(
                 targetSamples,
-                for: targetNoon,
+                for: scoreDate,
                 baselineBedtimes: baselineBedtimes
             )
 
