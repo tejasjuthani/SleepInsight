@@ -9,16 +9,26 @@ import SwiftUI
 
 struct MainDashboardView: View {
     let sleepScore: SleepScore
+    let insights: [InsightItem]
+    @Binding var selectedDate: Date
+    let availableDates: [Date]
+    let onDateSelected: (Date) -> Void
 
     private let insightEngine = InsightEngine()
-    private let tipEngine = TipEngine()
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // Day Selector
+                DaySelectorView(
+                    selectedDate: $selectedDate,
+                    availableDates: availableDates,
+                    onDateSelected: onDateSelected
+                )
+
                 // Header Section
                 VStack(spacing: 8) {
-                    Text("Yesterday's Sleep")
+                    Text(headerText)
                         .font(.caption)
                         .foregroundColor(.white.opacity(0.7))
                         .textCase(.uppercase)
@@ -30,27 +40,44 @@ struct MainDashboardView: View {
                 }
                 .padding(.top, 8)
 
-                // 1. Yesterday's Sleep Scores (Dual Display)
+                // 1. Sleep Scores (Dual Display)
                 SleepScoreView(sleepScore: sleepScore)
 
-                // 2. Component Breakdown already in SleepScoreView
-
-                // 3. What Helped / What Hurt
+                // 2. Component Breakdown (What Helped / What Hurt)
                 InsightBreakdownView(
                     insights: insightEngine.generateInsights(from: sleepScore)
                 )
 
-                // 4. Readiness for Today
-                ReadinessView(
-                    readiness: ReadinessScore(
-                        score: ReadinessScore.calculate(from: sleepScore.sleepInsightScore),
-                        date: Date()
-                    )
-                )
+                // 3. Today's Insights (Multi-Insight Display)
+                if !insights.isEmpty {
+                    DailyInsightsView(insights: insights)
+                }
 
-                // 5. Daily Action Tip
-                DailyTipView(
-                    tip: tipEngine.generateDailyTip(from: sleepScore)
+                // Medical Disclaimer
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.yellow)
+                            .font(.caption)
+                        Text("Medical Disclaimer")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+
+                    Text("SleepInsight is a general wellness app and does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.")
+                        .font(.caption2)
+                        .foregroundColor(.white.opacity(0.6))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.yellow.opacity(0.1))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
                 )
 
                 // Bottom spacing
@@ -69,6 +96,25 @@ struct MainDashboardView: View {
             )
             .ignoresSafeArea()
         )
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: AboutView()) {
+                    Image(systemName: "info.circle")
+                        .foregroundColor(.white)
+                }
+            }
+        }
+    }
+
+    private var headerText: String {
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date())
+
+        if let yesterday = yesterday, calendar.isDate(selectedDate, inSameDayAs: yesterday) {
+            return "Yesterday's Sleep"
+        } else {
+            return "Sleep Summary"
+        }
     }
 
     private var formattedDate: String {
@@ -78,7 +124,88 @@ struct MainDashboardView: View {
     }
 }
 
+// MARK: - Day Selector View
+
+struct DaySelectorView: View {
+    @Binding var selectedDate: Date
+    let availableDates: [Date]
+    let onDateSelected: (Date) -> Void
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(availableDates.reversed(), id: \.self) { date in
+                    DayButton(
+                        date: date,
+                        isSelected: Calendar.current.isDate(selectedDate, inSameDayAs: date),
+                        onTap: {
+                            selectedDate = date
+                            onDateSelected(date)
+                        }
+                    )
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+}
+
+struct DayButton: View {
+    let date: Date
+    let isSelected: Bool
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            VStack(spacing: 4) {
+                Text(dayLabel)
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(isSelected ? .white : .white.opacity(0.6))
+
+                Text(dayNumber)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+
+                Text(monthLabel)
+                    .font(.caption2)
+                    .foregroundColor(isSelected ? .white : .white.opacity(0.6))
+            }
+            .frame(width: 70, height: 80)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelected ? Color.blue.opacity(0.3) : Color.white.opacity(0.1))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isSelected ? Color.blue : Color.white.opacity(0.2), lineWidth: isSelected ? 2 : 1)
+            )
+        }
+    }
+
+    private var dayLabel: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE"
+        return formatter.string(from: date).uppercased()
+    }
+
+    private var dayNumber: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d"
+        return formatter.string(from: date)
+    }
+
+    private var monthLabel: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM"
+        return formatter.string(from: date).uppercased()
+    }
+}
+
 #Preview {
+    @Previewable @State var selectedDate = Calendar.current.startOfDay(for: Date())
+
     MainDashboardView(
         sleepScore: SleepScore(
             appleDurationScore: 48,
@@ -90,6 +217,19 @@ struct MainDashboardView: View {
             bedtimeHour: 22,
             bedtimeMinute: 30,
             interruptionCount: 3
-        )
+        ),
+        insights: [
+            InsightItem(
+                type: .highRecovery,
+                title: "High-Quality Recovery Night",
+                explanation: "You slept 8h 15m with only 3 interruptions.",
+                tonightPlan: "Tonight, maintain your current routine.",
+                priority: 1,
+                trendNote: "Trend: Excellent recovery pattern maintained."
+            )
+        ],
+        selectedDate: $selectedDate,
+        availableDates: (0..<7).compactMap { Calendar.current.date(byAdding: .day, value: -$0, to: Calendar.current.startOfDay(for: Date())) },
+        onDateSelected: { _ in }
     )
 }

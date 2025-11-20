@@ -4,28 +4,29 @@
 //
 //  Created by TJ Technologies
 //
+//  Apple HealthKit-aligned sleep score model
 
 import Foundation
 
 struct SleepScore: Identifiable {
     let id = UUID()
 
-    // Apple Health component scores
+    // Component scores (Apple Health-aligned)
     let appleDurationScore: Int     // 0–50
     let appleBedtimeScore: Int      // 0–30
     let appleInterruptionsScore: Int // 0–20
 
-    // Apple total score (simple sum, EXACT match to Apple Health)
+    // Apple total score (sum of components)
     var appleTotalScore: Int {
         appleDurationScore + appleBedtimeScore + appleInterruptionsScore
     }
 
-    // SleepInsight custom weighted score
+    // SleepInsight weighted score (0-100)
     let sleepInsightScore: Int
 
     let date: Date
 
-    // Raw sleep metrics
+    // Raw sleep metrics from HealthKit
     let totalSleepHours: Double
     let bedtimeHour: Int
     let bedtimeMinute: Int

@@ -7,6 +7,18 @@
 
 import Foundation
 
+// MARK: - Daily Insights (Balanced Style)
+
+/// Daily insights generated from sleep analysis with balanced, data-driven approach
+struct DailyInsights: Identifiable {
+    let id = UUID()
+    let keyInsight: String
+    let explanation: String
+    let tonightPlan: String
+}
+
+// MARK: - Sleep Insights (Original)
+
 struct SleepInsights: Identifiable {
     let id = UUID()
     let helpedFactors: [InsightFactor]
