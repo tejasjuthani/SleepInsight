@@ -171,6 +171,8 @@ struct WeeklyStatsSummaryView: View {
 struct WeeklyScoreTrendView: View {
     let scores: [SleepScore]
 
+    @State private var selectedIndex: Int?
+
     private let goalScore: Double = 70.0
     private let maxScore: Double = 100.0
     private let minBarHeight: CGFloat = 8.0
@@ -183,7 +185,7 @@ struct WeeklyScoreTrendView: View {
                 .fontWeight(.bold)
                 .foregroundColor(.white)
 
-            Text("SleepInsight+ score over the last 7 nights.")
+            Text("SleepInsight+ score for each of the last 7 nights.")
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.7))
 
@@ -238,12 +240,33 @@ struct WeeklyScoreTrendView: View {
                                     .foregroundColor(.white.opacity(0.7))
                                     .frame(width: barWidth)
                             }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                selectedIndex = index
+                            }
                         }
                     }
                 }
                 .frame(height: chartHeight + 20)
             }
             .frame(height: 220)
+
+            // Detail line
+            if let index = selectedIndex, index < scores.count {
+                let score = scores[index]
+                let formattedDate = formattedDetailDate(score.date)
+                let formattedHours = String(format: "%.1f", score.totalSleepHours)
+
+                Text("\(formattedDate) – \(score.sleepInsightScore) / 100, \(formattedHours) h, \(score.interruptionCount) interruptions")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.8))
+                    .padding(.top, 8)
+            } else {
+                Text("Tap a bar to see that night's details.")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.6))
+                    .padding(.top, 8)
+            }
         }
         .padding()
         .background(
@@ -255,6 +278,12 @@ struct WeeklyScoreTrendView: View {
     private func formattedWeekday(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE"
+        return formatter.string(from: date)
+    }
+
+    private func formattedDetailDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE d MMM"
         return formatter.string(from: date)
     }
 }
